@@ -1,0 +1,26 @@
+{
+  "redis": {
+    "address": "redis",
+    "port": 6379
+  },
+  "servers_location_route" : "servers_location",
+  "servers_info": [],
+  "sse_route": "sse",
+  "active_event_processors": [
+    "top_qnames",
+    "queries_summary",
+    "server_data",
+    "server_data_v2"
+  ],
+  "top_qnames": {
+    "times": [1, 5, 15],
+    "output_limit": 5
+  },
+  "summary": {
+    "times": [1, 5, 15],
+    "output_limit": 5
+  },
+  "server_data": {
+    "times": [1, 5, 15]
+  }
+}
