@@ -1,0 +1,40 @@
+{
+    "ServerId" : "",
+    "WindowSize" : 1000,
+    "Threads" : true,
+    "InputMethod" : "capture_file",
+    "InputSource" : "",
+    "EthHeader" : false,
+    "Speed" : 1,
+    "Filter" : "udp and port 53",
+    "PreliminarReducers" : [
+	{
+	    "Path" : "/var/fievel/prers/qnamecounter.lua",
+	    "OutputMethod" : "redis",
+	    "RedisServer" : "redis",
+	    "RedisPort" : 6379,
+	    "RedisChannel" : "topk"
+	},
+	{
+	    "Path" : "/var/fievel/prers/aps.lua",
+	    "OutputMethod" : "redis",
+	    "RedisServer" : "redis", 
+	    "RedisPort" : 6379,
+	    "RedisChannel" : "AnswersPerSecond"
+	},
+	{
+	    "Path" : "/var/fievel/prers/qps.lua",
+	    "OutputMethod" : "redis",
+	    "RedisServer" : "redis", 
+	    "RedisPort" : 6379,
+	    "RedisChannel" : "QueriesPerSecond"
+	},
+	{
+	    "Path" : "/var/fievel/prers/summary.lua",
+	    "OutputMethod" : "redis",
+	    "RedisServer": "redis", 
+	    "RedisPort" : 6379,
+	    "RedisChannel" : "QueriesSummary"
+	}
+    ]
+}
