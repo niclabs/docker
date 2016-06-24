@@ -1,4 +1,4 @@
-FROM fievel:latest
+FROM ratadns-fievel:latest
 MAINTAINER Francisco Cifuentes
 
 COPY run-fievel.sh /usr/bin/run-fievel.sh

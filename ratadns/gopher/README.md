@@ -3,9 +3,8 @@ RataDNS / Gopher Docker file
 
 The current folder has the Dockerfiles used to build gopher's image.
 
-It is based on the python:3-slim image and uses UWSGI as WSGI application container
-and expose the port 8000 as a uwsgi socker (in order to run this with a HTTP server 
-that has uwsgi support such as Nginx).
+It is based on the python:3-slim image and uses gunicorn as WSGI application container
+and expose the port 8000 as an http socket.
 
 # How to build
 

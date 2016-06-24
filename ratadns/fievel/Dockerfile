@@ -26,6 +26,7 @@ RUN cd /opt && \
     curl -O https://cmake.org/files/v3.4/cmake-3.4.1-Linux-x86_64.tar.gz && \
     tar -zxf cmake-3.4.1-Linux-x86_64.tar.gz
 
+# Set environment
 ENV PATH /opt/cmake-3.4.1-Linux-x86_64/bin:$PATH
     
 # Get project sources
@@ -43,7 +44,7 @@ RUN mkdir -p /opt/ratadns-fievel/build && \
 
 # Copy configurations and set defaults
 RUN mkdir -p /var/fievel/prers && \
-    cp -R /opt/ratadns-fievel/prers/ /var/fievel/prers && \
+    cp -R /opt/ratadns-fievel/prers/ /var/fievel && \
     cp /opt/ratadns-fievel/fievel.json /etc/fievel.json
 
 # Set the running command
