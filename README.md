@@ -13,7 +13,7 @@ We are following some simple conventions to make the dockerfiles to look alike a
 
 ### Structure
 1. Header:
-  1. *Fom*: You MUST have one docker from a specified version (FROM debian:**8**), you might use **latest** version but only if you have a fixed version of the same docker. This is intended to keep at least one version tested all the time.
+  1. *From*: You MUST have one docker from a specified version (FROM debian:**8**), you might use **latest** version but only if you have a fixed version of the same docker. This is intended to keep at least one version tested all the time.
   2. *Maintainer*: Include a maintainer.
 2. [Dependencies]:
   1. *Binary*: Install first the binary dependencies, and among them, start by the ones included in packages by the host OS. Use one line per dependency, this makes easier to see diff among versions.
