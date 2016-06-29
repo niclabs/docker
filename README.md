@@ -7,6 +7,10 @@ Place your Dockerfiles and related files at `/project_name/ `
 
 ## How to do the Dockerfile?
 We are following some simple conventions to make the dockerfiles to look alike among them.
+### Miscellaneous
+1. When listing, several dependencies for instance, use one line per item, this make easier to see the diff among versions.
+2. Also when listing, follow an alphabetical order if possible. This make quicker to find something specific when searching.
+
 ### Structure
 1. Header:
   1. *Fom*: You MUST have one docker from a specified version (FROM debian:**8**), you might use **latest** version but only if you have a fixed version of the same docker. This is intended to keep at least one version tested all the time.
