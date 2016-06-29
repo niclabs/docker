@@ -24,6 +24,10 @@ We are following some simple conventions to make the dockerfiles to look alike a
   1. There might be dependencies only needed at compile-time, the compiler is a classic example. Remove all dependencies not needed at run-time at this step. This keep the image smaller and removing the compiler in a production system is always a good idea.
 5. [Run command].
 
+### Example:
+For reference or to use it as template you can see the following file.
+* [Dockerfile example] (https://github.com/niclabs/docker/blob/master/ratadns/gopher/Dockerfile)
+
 ### Useful links:
 * [Dockerfile reference](https://docs.docker.com/engine/reference/builder/ "Reference")
 
