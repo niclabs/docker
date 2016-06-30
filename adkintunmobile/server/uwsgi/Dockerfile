@@ -10,8 +10,7 @@ RUN apt-get update && \
 		gcc \
 		git \
 		libpq-dev \
-		make \
-		wget
+		make
 
 # clone project
 RUN mkdir /adk && \
@@ -22,30 +21,24 @@ RUN mkdir /adk && \
 
 # install pip dependencies
 RUN cd /adk/AdkintunMobile-Server && \
-	pip install -r requirements.txt
-
-
-## Configuration
-# Clone antennas data file
-RUN cd /adk/AdkintunMobile-Server/app/data && \
-	wget --no-check-certificate 'https://docs.google.com/uc?export=download&id=0B3bt_QH0DLXzaWNTdDREV1ptcWM' -O initial_data_antennas.py
+	pip install -r requirements.txt && \
+	pip install uwsgi
 
 
 ## Clean Up
 # cleaning up apt dependencies
-RUN apt-get remove -y \
+RUN apt-get purge -y \
     gcc \
     git \
     libpq-dev \
-    make \
-    wget
+    make
+
+# cleaning up manage file
+RUN cd /adk/AdkintunMobile-Server && \
+	rm manage.py
 
 
 ## Run command
-# run migrate
+#run uwsgi
 CMD cd /adk/AdkintunMobile-Server && \
-	python manage.py db init && \
-	python manage.py db migrate && \
-	python manage.py db upgrade && \
-	python manage.py populate && \
-	python manage.py populate_antennas
+	uwsgi --socket 0.0.0.0:8000  -w app:app
