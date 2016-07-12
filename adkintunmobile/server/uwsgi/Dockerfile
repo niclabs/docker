@@ -41,4 +41,4 @@ RUN cd /adk/AdkintunMobile-Server && \
 ## Run command
 #run uwsgi
 CMD cd /adk/AdkintunMobile-Server && \
-	uwsgi --socket 0.0.0.0:8000  --processes 8 -w app:app
+	uwsgi --socket 0.0.0.0:8000  --processes $(nproc) -w app:app
