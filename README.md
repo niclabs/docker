@@ -32,3 +32,6 @@ For reference or to use it as template you can see the following file.
 * [Dockerfile reference](https://docs.docker.com/engine/reference/builder/ "Reference")
 
 * [Docker best practices](http://crosbymichael.com/dockerfile-best-practices.html "Best Practices")
+
+* [Refactoring Dockerfiles for Image size](https://blog.replicated.com/2016/02/05/refactoring-a-dockerfile-for-image-size/)
+ 
