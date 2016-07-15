@@ -6,7 +6,7 @@ MAINTAINER Boris Romero <boris@niclabs.cl>
 ## Dependencies
 # install apt dependencies
 RUN apt-get update && \
-	apt-get install -y \
+	apt-get install -y --no-install-recommends \
 		gcc \
 		git \
 		libpq-dev \
@@ -18,7 +18,7 @@ RUN mkdir /adk && \
 	cd /adk && \
 	git clone https://github.com/niclabs/AdkintunMobile-Server.git && \
 	cd AdkintunMobile-Server && \
-	git checkout 451e2637dd7bf15d0574b49d2397e90f548ef6ab 
+	git checkout 6ef38fd6e87695401f0d97bf4f7e9d55361e536a 
 
 # install pip dependencies
 RUN cd /adk/AdkintunMobile-Server && \
@@ -38,7 +38,8 @@ RUN apt-get purge -y \
     git \
     libpq-dev \
     make \
-    wget
+    wget && \
+    rm -rf /var/lib/apt/lists/*
 
 
 ## Run command
