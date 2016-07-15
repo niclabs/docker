@@ -38,8 +38,10 @@ RUN apt-get purge -y \
     git \
     libpq-dev \
     make \
-    wget && \
-    rm -rf /var/lib/apt/lists/*
+    wget
+
+# cleaning up list of available packages
+RUN rm -rf /var/lib/apt/lists/*
 
 
 ## Run command

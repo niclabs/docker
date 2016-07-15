@@ -31,8 +31,10 @@ RUN apt-get purge -y \
     gcc \
     git \
     libpq-dev \
-    make && \
-    rm -rf /var/lib/apt/lists/*
+    make
+
+# cleaning up list of available packages
+RUN rm -rf /var/lib/apt/lists/*
 
 # cleaning up manage file
 RUN cd /adk/AdkintunMobile-Server && \
