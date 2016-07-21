@@ -46,7 +46,7 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 cd "$DIR/populate"
 docker build --tag populate-adk .
 cd "$DIR"
-docker run --name populate-adk --link postgres-adk:postgres -v $(pwd)/config.py:/adk/AdkintunMobile-Server/config.py --rm populate-adk
+docker run --name populate-adk --link postgres-adk:postgres -v $(pwd)/config.py:/adk/AdkintunMobile-Server/config.py -p 5432:5432 --rm populate-adk
 
 
 # Run uwsgi docker
