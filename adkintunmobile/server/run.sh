@@ -37,7 +37,7 @@ fi
 
 # Run the database docker
 # Give as parameter the database name, the user and the password. They must be the same in config.py
-docker run --name postgres-adk -e POSTGRES_PASSWORD=$p -e POSTGRES_USER=$u -e POSTGRES_DB=$d --restart=unless-stopped -p 5432:5432 -d postgres
+docker run --name postgres-adk -e POSTGRES_PASSWORD=$p -e POSTGRES_USER=$u -e POSTGRES_DB=$d --restart=unless-stopped -p 5432:5432 --log-opt max-size=50m -d postgres
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
@@ -53,9 +53,9 @@ docker run --name populate-adk --link postgres-adk:postgres -v $(pwd)/config.py:
 cd "$DIR/uwsgi"
 docker build --tag uwsgi-adk .
 cd "$DIR"
-docker run --name uwsgi-adk --link postgres-adk:postgres -v $(pwd)/config.py:/adk/AdkintunMobile-Server/config.py --restart=unless-stopped -d uwsgi-adk
+docker run --name uwsgi-adk --link postgres-adk:postgres -v $(pwd)/config.py:/adk/AdkintunMobile-Server/config.py --restart=unless-stopped --log-opt max-size=50m -d uwsgi-adk
 
 
 # Run the nginx server docker
 cd "$DIR"
-docker run --name nginx-adk -v $(pwd)/nginx.conf:/etc/nginx/conf.d/adk.conf:ro --link uwsgi-adk:uwsgi-adk -p 80:80 --restart=unless-stopped -d nginx
+docker run --name nginx-adk -v $(pwd)/nginx.conf:/etc/nginx/conf.d/adk.conf:ro --link uwsgi-adk:uwsgi-adk -p 80:80 --restart=unless-stopped --log-opt max-size=50m -d nginx
