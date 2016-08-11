@@ -23,52 +23,36 @@ RUN apk add cmake \
             util-linux-dev \
             zeromq-dev
 
-# RUN apt-get update -qq
-
-# RUN apt-get install -y --no-install-recommends \
-        # build-essential \
-        # git \
-        # m4 \
-        # python \
-        # software-properties-common \
-        # unzip \
-        # wget
-
-# RUN apt-get install -y \
-        # check \
-        # cmake \
-        # libbotan1.10-dev \
-        # libconfig-dev \
-        # libgmp-dev \
-        # libjson-c-dev \
-        # libmhash-dev \
-        # libsodium-dev \
-        # libsqlite3-dev \
-        # uuid-dev
-
 # RUN wget https://github.com/zeromq/zeromq4-1/releases/download/v4.1.4/zeromq-4.1.4.tar.gz
 # RUN tar -xzC /tmp -f zeromq-4.1.4.tar.gz && rm zeromq-4.1.4.tar.gz
 
-RUN wget https://botan.randombit.net/releases/Botan-1.11.30.tgz
-RUN tar -xzC /tmp -f Botan-1.11.30.tgz && rm Botan-1.11.30.tgz
-
-RUN wget https://github.com/niclabs/tchsm-libtc/archive/master.zip
-RUN unzip master.zip -d /tmp && rm master.zip
-
-RUN wget https://github.com/niclabs/tchsm-libdtc/archive/master.zip
-RUN unzip master.zip -d /tmp && rm master.zip
-
-#RUN cd /tmp/libsodium-1.0.9/ && ./configure && make && make install
-
 # RUN cd /tmp/zeromq-4.1.4 && ./configure --with-libsodium && make && make install && ldconfig
 
-RUN cd /tmp/tchsm-libtc-master && mkdir build && cd build && cmake .. && make install
-
-RUN cd /tmp/Botan-1.11.30 && ./configure.py  && make && make install
+RUN wget https://botan.randombit.net/releases/Botan-1.11.30.tgz \
+ && tar -xzC /tmp -f Botan-1.11.30.tgz && rm Botan-1.11.30.tgz \
+ && cd /tmp/Botan-1.11.30 && ./configure.py  && make && make install \
+ && cd / && rm -r /tmp/Botan-1.11.30
 
 ENV PKG_CONFIG_PATH /usr/local/lib/pkgconfig
-#RUN echo $PKG_CONFIG_PATH
 
-RUN cd /tmp/tchsm-libdtc-master && mkdir build && cd build && cmake -DBUILD_TESTING=OFF .. && make tchsm_node install
+RUN wget https://github.com/niclabs/tchsm-libtc/archive/master.zip \
+ && unzip master.zip -d /tmp && rm master.zip \
+ && cd /tmp/tchsm-libtc-master && mkdir build && cd build && cmake .. && make install \
+ && cd / && rm -r /tmp/tchsm-libtc-master
 
-CMD ["/bin/sh"]
+RUN wget https://github.com/niclabs/tchsm-libdtc/archive/master.zip \
+ && unzip master.zip -d /tmp && rm master.zip \
+ && cd /tmp/tchsm-libdtc-master && mkdir build \
+ && cd build && cmake -DBUILD_TESTING=OFF .. && make tchsm_node install \
+ && cd / && rm -r /tmp/tchsm-libdtc-master
+
+RUN apk del cmake \
+            gcc \
+            g++ \
+            make \
+            python \
+            util-linux-dev \
+            openssl
+
+ENTRYPOINT ["/usr/local/bin/tchsm_node"]
+CMD ["-c", "/etc/node.conf"]
