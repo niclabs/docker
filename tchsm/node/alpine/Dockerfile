@@ -43,7 +43,7 @@ RUN wget https://github.com/niclabs/tchsm-libtc/archive/master.zip \
 RUN wget https://github.com/niclabs/tchsm-libdtc/archive/master.zip \
  && unzip master.zip -d /tmp && rm master.zip \
  && cd /tmp/tchsm-libdtc-master && mkdir build \
- && cd build && cmake -DBUILD_TESTING=OFF .. && make tchsm_node install \
+ && cd build && cmake -DCMAKE_BUILD_TYPE=Debug -DBUILD_TESTING=OFF .. && make tchsm_node install \
  && cd / && rm -r /tmp/tchsm-libdtc-master
 
 RUN apk del cmake \

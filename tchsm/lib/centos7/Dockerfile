@@ -55,7 +55,7 @@ RUN cd /tmp && mkdir libdtc && cd libdtc \
 # TODO TEMPORAL
 # && git checkout a9a3e299a46 \
  && mkdir build && cd build \
- && cmake -DBUILD_TESTING=OFF .. \
+ && cmake -DCMAKE_BUILD_TYPE=Debug -DBUILD_TESTING=OFF .. \
  && make install
 
 # Testing
