@@ -1,6 +1,15 @@
 FROM tchsm-lib-ubuntu14:latest
 
-RUN apt-get install -y curl gcc g++
+RUN apt-get install -y autotools-dev \
+                       build-essential \
+                       curl \
+                       gcc \
+                       g++ \
+                       libedit-dev \
+                       libidn11-dev \
+                       libgmp-dev \
+                       libjansson-dev \
+                       pkg-config
 
 RUN curl -LO http://ftp.gnu.org/gnu/libtasn1/libtasn1-4.7.tar.gz \
  && tar -xzC /tmp -f libtasn1-4.7.tar.gz && rm libtasn1-4.7.tar.gz \
@@ -12,6 +21,8 @@ RUN curl -LO ftp://sourceware.org/pub/libffi/libffi-3.2.1.tar.gz \
  && cd /tmp/libffi-3.2.1 && ./configure && make && make install \
  && cd / && rm -r /tmp/libffi-3.2.1
 
+ENV PKG_CONFIG_PATH /usr/local/lib64/pkgconfig/:/usr/local/lib/pkgconfig
+
 RUN curl -LO https://p11-glue.freedesktop.org/releases/p11-kit-0.23.2.tar.gz \
  && tar -xzC /tmp -f p11-kit-0.23.2.tar.gz && rm p11-kit-0.23.2.tar.gz \
  && cd /tmp/p11-kit-0.23.2 && ./configure && make && make install \
@@ -21,8 +32,6 @@ RUN curl -LO https://ftp.gnu.org/gnu/nettle/nettle-3.2.tar.gz \
  && tar -xzC /tmp -f nettle-3.2.tar.gz && rm nettle-3.2.tar.gz \
  && cd /tmp/nettle-3.2 && ./configure && make && make install \
  && cd / && rm -r /tmp/nettle-3.2
-
-ENV PKG_CONFIG_PATH ${PKG_CONFIG_PATH}:/usr/local/lib64/pkgconfig/
 
 RUN curl -LO ftp://ftp.gnutls.org/gcrypt/gnutls/v3.4/gnutls-3.4.9.tar.xz \
  && tar -xC /tmp -f gnutls-3.4.9.tar.xz && rm gnutls-3.4.9.tar.xz \
@@ -39,7 +48,4 @@ RUN curl -LO https://secure.nic.cz/files/knot-dns/knot-2.2.1.tar.xz \
  && cd /tmp/knot-2.2.1 && ./configure && make && make install \
  && cd / && rm -r /tmp/knot-2.2.1
 
-EXPOSE 53
-
 CMD ["/root/knot_conf/run.sh"]
-#CMD ["bash"]

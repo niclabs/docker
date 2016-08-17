@@ -1,10 +1,35 @@
-example.com.            3600    SOA     dns1.example.com. hostmaster.example.com. 2010111219 21600 3600 604800 86400
-example.com.            3600    NS      dns1.example.com.
-example.com.            3600    NS      dns2.example.com.
-example.com.            3600    MX      10 mail.example.com.
-dns1.example.com.       3600    A       192.0.2.1
-dns1.example.com.       3600    AAAA    2001:db8::1
-dns2.example.com.       3600    A       192.0.2.2
-dns2.example.com.       3600    AAAA    2001:db8::2
-mail.example.com.       3600    A       192.0.2.3
-mail.example.com.       3600    AAAA    2001:db8::3
+;; Zone dump (Knot DNS 2.2.1)
+example.com.        	3600	SOA	dns1.example.com. hostmaster.example.com. 2010111223 21600 3600 604800 86400
+example.com.        	3600	NS	dns1.example.com.
+example.com.        	3600	NS	dns2.example.com.
+example.com.        	3600	MX	10 mail.example.com.
+example.com.        	3600	DNSKEY	256 3 8 AwEAARNG/5BPVOL2v5y4K9RMaSV5oCIgdDoklF1/rDYDpDdjHlb5/OspqgpGHq/LESnKkpR20xz3ZOtkUT0oJuD2OoyrJukz0iXG4RsbgSynYII42/DN/hWXWUrrUxfYnwMh+eooVkGGoyUFMn+fk5wd7fjVs5iy+qjdjD/Dk3j+PQ==
+example.com.        	3600	DNSKEY	257 3 8 AwEAAUe4Mglo2kxX4slYIhc3KX8INVrn6m+lHEhYQA4h9IDPbFBd1SJXXiOT+Vv7W9ZGqm6KQnxGGBBYjxkarZ2p/uAUFLzXMfbiuPOiabY/DE+Jegfq00wVsm9YPTiHyDUgLsFJB57ePJfl6xuDVs94tHBl3OS5VlhU3WsIEufHiQ==
+dns1.example.com.   	3600	A	192.0.2.1
+dns1.example.com.   	3600	AAAA	2001:db8::1
+dns2.example.com.   	3600	A	192.0.2.2
+dns2.example.com.   	3600	AAAA	2001:db8::2
+mail.example.com.   	3600	A	192.0.2.3
+mail.example.com.   	3600	AAAA	2001:db8::3
+;; DNSSEC signatures
+example.com.        	3600	RRSIG	NS 8 2 3600 20160831172803 20160817172803 2484 example.com. De664xD8ViMzOmz8G6hH5iMFyB/3KZnkizXFRnwQQsLFv/1gPyLJeFVUz+/JSu9XLqdkfmgo1hHL5DFrM/uJGMbthw61bqA7jY/qIYMEQC7HWGdR3rkylRktifRC8ag278yAwR8QZSx69tDLzDO+8WPQaEiUVfqcoG+EIm6T
+example.com.        	3600	RRSIG	SOA 8 2 3600 20160831172803 20160817172803 2484 example.com. B6fz3jb+96iIneGtCGxVVX3nDRQngIe3DYK7w9HxEEmnri63bQxGfHezdD9UkM2dQBOkBKGkjLTkPdlLVMWvk3QrinlrkhBJEz2LP9TzKxDcdgU6wkBAxMXD5n2XKeePIj+YRFLLw8pI/tEST4ZoVuTHgfL2tC6DLMcHSsEi
+example.com.        	3600	RRSIG	MX 8 2 3600 20160831172803 20160817172803 2484 example.com. AXxw0Mt2Oa5IhsTZOXDdQfaum/sbMZppgfkFWLv2G1/iCBFmJUrQ//46ntPG4DMGTowhLPCS3GbLbKVZMMKUDYgqPTGK2k1WF7Hg/ayvpSNwhLlir4hoYO9X7oQu3byk+CgvnMk+yKTu2TdKI927fhMDyL5OkcS1OzTo0OHM
+example.com.        	86400	RRSIG	NSEC 8 2 86400 20160831172803 20160817172803 2484 example.com. Au17Hy6aZjbF/OK1rdUdEFNYNFnUybo7WYWOu8klWFO5bhWWxzUws2UCPta6fdVWKBkhlBicyScAE79+3fwCHwtc5cH4J4qTp83Ekes8CJolfvhR1kf25Me9IFH3rTRRpLhv4ehBKizUzPU187Zh8PvgrpuUcYmqsdebzpKf
+example.com.        	3600	RRSIG	DNSKEY 8 2 3600 20160831172803 20160817172803 5392 example.com. JXNMr4s0wvo41STLZXTBRPvwhEB3PHlNTA5q7wiz4cL1YW9ggZP9clRXRW3Esu6ljI2ES84TXiU7aGk510IEMSDEB9Ug8dIQAfc9XnE9a5sfwv0bQZOW/J2eSvOuOBiJqhi6CPu3sFY20cbXxtK+I6/YyXsN7aOy9PSCV3YQ
+dns1.example.com.   	3600	RRSIG	A 8 3 3600 20160831172803 20160817172803 2484 example.com. DeERGbWGnzU4/di5v3TUmL0xr0lP8Tk37YGwQVxNN9alo3TF4sQ0PwpPw2f1u20zzTgrmJtEsvpA1onpF62Ryd7yhRNYX5lqpDeB4J0pwLf5lBg36Ls0UbWoh7lY/5yGccDuao8sj583MNRxYfJCYqtYwosqaTx6ZjYy33Ix
+dns1.example.com.   	3600	RRSIG	AAAA 8 3 3600 20160831172803 20160817172803 2484 example.com. CxONIiyV6N95WKnFZcnEfrpNRtWH5mgme2ezTDVY1+4Aru959SCdh6dENNtNp4ated3BY0iI7YZJYdpMg9FbAiFj4RcYQnOBGQeDNGBE61nRNOSADuIYjGvkLhc7H+LYkndrcNniJEdlVHborgwYRpEXK6qPILk4mJma+dZl
+dns1.example.com.   	86400	RRSIG	NSEC 8 3 86400 20160831172803 20160817172803 2484 example.com. Airfze7BI1MG3D6Ii/z4JKzn4GzaMEaBvtGI6+i6EO49rAOqCcbkUCsjd8tv1YXzgGRNiaryn1YwlrFXFFwU0YhHg7BKIZXSHsFk5p0JHPqSCGiaDg51EuIc8wGsZCGR3UFpLHHtH3yQAndEZJCVYT7YPyjlVF4zu2Kgo05n
+dns2.example.com.   	3600	RRSIG	A 8 3 3600 20160831172803 20160817172803 2484 example.com. BxtQ4mj+4J4IKftjaZ+r9dY4AtLsMzN8BIAHgANQhCf3fJQMQLoAzpA0Wmh+u+cAa2gSfp/ncJZEBtBTbf5IKiTnoxHEOywqsFN3R7V0ET7PMXwalBKu4OUPl4LxiutpZiw9GApkj6zfEPKVDSHcrHZvHh0Q6gqpQXztw1o9
+dns2.example.com.   	3600	RRSIG	AAAA 8 3 3600 20160831172803 20160817172803 2484 example.com. CTZB6q1wXjQhffgU8l+Jel0Spsp/PIxlNTeFHJkeFleZSG3G4gGmUVSA43AZDo5+ywKGjSjxAhzoFptXDfW6hDh/dpS/Y76vZcKinrGD6pOtbCRYnCU1usP28EQf/QUzHiM15tYwuB4mvi2HE54iF5x5zkQowbbMZ1FTIRSo
+dns2.example.com.   	86400	RRSIG	NSEC 8 3 86400 20160831172803 20160817172803 2484 example.com. BrVREZLeg8R8yEFQgDO2kg9dEE6+fQN9jAtpw7jf6FSeaWxma+TRZbvoYAgGKYLdEZcpACK+Nb/OvWeQsMDakc77D7culPnnuCmT4Br+yxnj+eM9MEm8Q8ExvMHMxlelmfZrtp9uCDQgDdykQ1B5m8lfAv9u2VceHCE9ZhHs
+mail.example.com.   	3600	RRSIG	A 8 3 3600 20160831172803 20160817172803 2484 example.com. Abk3p4MXO4Sn2tsPBf/4Zp2qOuuO6hSBBOnhHQGJl7+/QiftIwX6irTA1PobiuhaGYJDYsDDi4bKF09MZLhIY2Y2HqCX+Sh4rT1aQq+AN+ErA2WxG4lHoBZwn6PtvAXkAl08ZSsct2dtyh+hzh/U26qv2uYbH43FeMvvqdZG
+mail.example.com.   	3600	RRSIG	AAAA 8 3 3600 20160831172803 20160817172803 2484 example.com. D4wV0aeq6723H77GqOnmaojH+DGwpaEH6a5E6XY2lVcb2Uxu4FCKtXuuE0uRutUU4b7YyczsmxU060v6FEBdv604Kc39XhLHu6dJJKdupoux7IB2d4nVPOJtRAR2sl6ieOriG5R5rLV0WMBivjj5tKiDeVaNVifkD4RLJ6OM
+mail.example.com.   	86400	RRSIG	NSEC 8 3 86400 20160831172803 20160817172803 2484 example.com. BZ8QK3hNmhkjQDnvZpkjCnbcMQapJ5wXx5SK1lSHLLV8B1q2/nZE9c3aJ/RRVOCuJHrSzjYEdIPK2EhBpMVSAKhlTu91OjasOL2A5Bu0evEULO00B3mikCgOBvNh3GZ3xWI9S6oWDT1EPoIAijH3pro39vpgg3Fb4vBve8av
+;; DNSSEC NSEC chain
+example.com.        	86400	NSEC	dns1.example.com. NS SOA MX RRSIG NSEC DNSKEY
+dns1.example.com.   	86400	NSEC	dns2.example.com. A AAAA RRSIG NSEC
+dns2.example.com.   	86400	NSEC	mail.example.com. A AAAA RRSIG NSEC
+mail.example.com.   	86400	NSEC	example.com. A AAAA RRSIG NSEC
+;; Written 30 records
+;; Time 2016-08-17 17:28:03 UTC

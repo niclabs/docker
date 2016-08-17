@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -e
+
 mkdir /root/kasp && cd /root/kasp && keymgr init
 
 export KEYMGR_DIR=/root/kasp
