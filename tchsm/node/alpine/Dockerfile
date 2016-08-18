@@ -23,11 +23,6 @@ RUN apk add cmake \
             util-linux-dev \
             zeromq-dev
 
-# RUN wget https://github.com/zeromq/zeromq4-1/releases/download/v4.1.4/zeromq-4.1.4.tar.gz
-# RUN tar -xzC /tmp -f zeromq-4.1.4.tar.gz && rm zeromq-4.1.4.tar.gz
-
-# RUN cd /tmp/zeromq-4.1.4 && ./configure --with-libsodium && make && make install && ldconfig
-
 RUN wget https://botan.randombit.net/releases/Botan-1.11.30.tgz \
  && tar -xzC /tmp -f Botan-1.11.30.tgz && rm Botan-1.11.30.tgz \
  && cd /tmp/Botan-1.11.30 && ./configure.py  && make && make install \

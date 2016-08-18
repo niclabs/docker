@@ -48,4 +48,15 @@ RUN curl -LO https://secure.nic.cz/files/knot-dns/knot-2.2.1.tar.xz \
  && cd /tmp/knot-2.2.1 && ./configure && make && make install \
  && cd / && rm -r /tmp/knot-2.2.1
 
+RUN apt-get purge -y autotools-dev \
+                     build-essential \
+                     curl \
+                     gcc \
+                     g++ \
+                     libedit-dev \
+                     libidn11-dev \
+                     libgmp-dev \
+                     libjansson-dev \
+                     pkg-config
+
 CMD ["/root/knot_conf/run.sh"]
