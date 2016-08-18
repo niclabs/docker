@@ -11,7 +11,8 @@ function start {
     set -e
 
     docker build -t tchsm-node-alpine $(pwd)/../../node/alpine
-    docker build -t tchsm-demo-knot .
+    docker build -t tchsm-node-alpine $(pwd)/../../lib/ubuntu14
+    docker build -t tchsm-demo-ubuntu14-knot .
 
     docker network create -d bridge tchsm
     for i in $(seq 1 $NODES)
@@ -19,7 +20,7 @@ function start {
         docker -D run --net=tchsm -d --name node-"$i" -v $(pwd)/conf_files/node$i.conf:/etc/node"$i".conf tchsm-node-alpine:latest -c /etc/node"$i".conf
     done
 
-    docker create --net=tchsm --name knot-tchsm-demo -p 54:53 -p 54:53/udp tchsm-demo-knot
+    docker create --net=tchsm --name knot-tchsm-demo -p 54:53 -p 54:53/udp tchsm-demo-ubuntu14-knot
 
     # This will copy the configuration files into the container.
     # We're not using volumes because knot change file permissions.
