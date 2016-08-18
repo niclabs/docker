@@ -1,18 +1,21 @@
 #!/usr/bin/env bash
 
 
-usage() { echo "Usage: $0 start | stop"; exit 1; }
+usage() { echo "Usage: $0 build | start | stop"; exit 1; }
 
 NODES=3
 
-function start {
-
-    # Makes the script fails if some command fails
+function build {
     set -e
 
     docker build -t tchsm-node-alpine $(pwd)/../../node/alpine
-    docker build -t tchsm-node-alpine $(pwd)/../../lib/ubuntu14
+    docker build -t tchsm-lib-ubuntu14 $(pwd)/../../lib/ubuntu14
     docker build -t tchsm-demo-ubuntu14-knot .
+}
+
+function start {
+
+    set -e
 
     docker network create -d bridge tchsm
     for i in $(seq 1 $NODES)
@@ -46,6 +49,9 @@ case "$1" in
         ;;
     stop)
         stop
+        ;;
+    build)
+        build
         ;;
     *) usage ;;
 esac
