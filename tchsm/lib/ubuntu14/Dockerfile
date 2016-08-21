@@ -47,23 +47,11 @@ RUN wget https://github.com/niclabs/tchsm-libtc/archive/master.zip \
 RUN cd /tmp && mkdir libdtc && cd libdtc \
  && git clone https://github.com/niclabs/tchsm-libdtc.git \
  && cd tchsm-libdtc \
- && git checkout system_test_fix \
-# TODO TEMPORAL
-# && git checkout a9a3e299a46 \
+ && git checkout 2af808cd98b6a35b5a8d4245c2fe29b83127546e \
  && mkdir build && cd build \
  && cmake -DBUILD_TESTING=OFF .. \
  && sudo make install \
  && cd / && rm -r /tmp/libdtc
-
-# Testing
-# RUN wget ftp://sourceware.org/pub/libffi/libffi-3.2.1.tar.gz \
-#  && tar -xzC /tmp -f libffi-3.2.1.tar.gz && rm libffi-3.2.1.tar.gz \
-#  && cd /tmp/libffi-3.2.1 && ./configure && make && make install \
-#  && cd /tmp/libdtc/tchsm-libdtc/build \
-#  && make system_test check \
-#  && sudo apt-get install -y check python3-pip libssl-dev \
-#  && sudo pip3 install -r ../tests/system_test/requirements.txt \
-#  && python ../tests/system_test/system_test.py --debug  -v -r 'PKCS11 THREE NODES, O' .
 
 RUN sudo apt-get purge -y \
         build-essential \
