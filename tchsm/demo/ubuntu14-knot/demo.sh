@@ -5,12 +5,15 @@ usage() { echo "Usage: $0 build | start | stop"; exit 1; }
 
 NODES=3
 
+DEMO_DIRECTORY_=`dirname $0`
+DEMO_DIRECTORY=`realpath $DEMO_DIRECTORY_`
+
 function build {
     set -e
 
-    docker build -t tchsm-node-alpine $(pwd)/../../node/alpine
-    docker build -t tchsm-lib-ubuntu14 $(pwd)/../../lib/ubuntu14
-    docker build -t tchsm-demo-ubuntu14-knot .
+    docker build -t tchsm-node-alpine ${DEMO_DIRECTORY}/../../node/alpine
+    docker build -t tchsm-lib-ubuntu14 ${DEMO_DIRECTORY}/../../lib/ubuntu14
+    docker build -t tchsm-demo-ubuntu14-knot ${DEMO_DIRECTORY}/.
 }
 
 function start {
@@ -20,14 +23,14 @@ function start {
     docker network create -d bridge tchsm
     for i in $(seq 1 $NODES)
     do
-        docker -D run --net=tchsm -d --name node-"$i" -v $(pwd)/conf_files/node$i.conf:/etc/node"$i".conf tchsm-node-alpine:latest -c /etc/node"$i".conf
+        docker -D run --net=tchsm -d -v $DEMO_DIRECTORY/conf_files/node$i.conf:/etc/node$i.conf --name node-$i tchsm-node-alpine -c /etc/node$i.conf
     done
 
     docker create --net=tchsm --name knot-tchsm-demo -p 54:53 -p 54:53/udp tchsm-demo-ubuntu14-knot
 
     # This will copy the configuration files into the container.
     # We're not using volumes because knot change file permissions.
-    docker cp $(pwd)/conf_files/knot knot-tchsm-demo:/root/knot_conf/
+    docker cp $DEMO_DIRECTORY/conf_files/knot knot-tchsm-demo:/root/knot_conf/
 
     docker start knot-tchsm-demo
 }
