@@ -1,5 +1,7 @@
 FROM alpine:edge
 
+MAINTAINER Francisco Montoto <montoto@niclabs.cl>
+
 # MHASH is only at testing repo
 RUN echo "@testing http://dl-4.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories
 

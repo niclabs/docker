@@ -1,5 +1,7 @@
 FROM ubuntu:14.04
 
+MAINTAINER Francisco Montoto <montoto@niclabs.cl>
+
 RUN apt-get update -qq
 
 RUN apt-get install -y --no-install-recommends \

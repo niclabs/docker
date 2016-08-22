@@ -1,5 +1,7 @@
 FROM tchsm-lib-ubuntu14:latest
 
+MAINTAINER Francisco Montoto <montoto@niclabs.cl>
+
 RUN apt-get install -y autotools-dev \
                        build-essential \
                        curl \
