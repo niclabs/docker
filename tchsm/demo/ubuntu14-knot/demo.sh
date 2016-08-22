@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 
-
 usage() { echo "Usage: $0 build | start | stop"; exit 1; }
 
 NODES=3
@@ -9,6 +8,7 @@ DEMO_DIRECTORY_=`dirname $0`
 DEMO_DIRECTORY=`realpath $DEMO_DIRECTORY_`
 
 function build {
+
     set -e
 
     docker build -t tchsm-node-alpine ${DEMO_DIRECTORY}/../../node/alpine
@@ -36,6 +36,7 @@ function start {
 }
 
 function stop {
+
     for i in $(seq 1 $NODES)
     do
         docker rm -f node-$i
