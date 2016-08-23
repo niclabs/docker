@@ -6,9 +6,10 @@ Docker based demo of the TCHSM as cryptographic backend for a knot DNS server im
 ## Run the Demo
 
 There is an included script to build and run the demo.
-To build, execute: ```demo.sh build```.
 
-To start the demo: ```demo.sh start```.
+To build, execute: ```demo.sh build```
+
+To start the demo: ```demo.sh start```
 
 To stop the demo: ```demo.sh stop```
 
