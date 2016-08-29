@@ -2,9 +2,6 @@ FROM alpine:edge
 
 MAINTAINER Francisco Montoto <montoto@niclabs.cl>
 
-# MHASH is only at testing repo
-RUN echo "@testing http://dl-4.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories
-
 # Certificates needed to use wget ssl
 RUN apk upgrade --update
 
@@ -17,7 +14,6 @@ RUN apk add cmake \
             libsodium-dev \
             libuuid \
             make \
-            mhash-dev@testing \
             # WGET ssl helper
             openssl \
             python \
@@ -29,6 +25,11 @@ RUN wget https://botan.randombit.net/releases/Botan-1.11.30.tgz \
  && tar -xzC /tmp -f Botan-1.11.30.tgz && rm Botan-1.11.30.tgz \
  && cd /tmp/Botan-1.11.30 && ./configure.py  && make && make install \
  && cd / && rm -r /tmp/Botan-1.11.30
+
+RUN wget http://downloads.sourceforge.net/project/mhash/mhash/0.9.9.9/mhash-0.9.9.9.tar.gz \
+ && tar -xzC /tmp -f mhash-0.9.9.9.tar.gz && rm mhash-0.9.9.9.tar.gz \
+ && cd /tmp/mhash-0.9.9.9 && ./configure  && make && make install \
+ && cd / && rm -r /tmp/mhash-0.9.9.9
 
 ENV PKG_CONFIG_PATH /usr/local/lib/pkgconfig
 
