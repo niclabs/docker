@@ -6,7 +6,7 @@ NODES=3
 EXPOSE_PORT=54
 
 DEMO_DIRECTORY_=`dirname $0`
-DEMO_DIRECTORY=`realpath $DEMO_DIRECTORY_`
+DEMO_DIRECTORY=`readlink -e $DEMO_DIRECTORY_`
 
 function build {
 
@@ -27,7 +27,7 @@ function start {
         docker -D run --net=tchsm -d -v $DEMO_DIRECTORY/conf_files/node$i.conf:/etc/node$i.conf --name node-$i tchsm-node-alpine -c /etc/node$i.conf
     done
 
-    docker create --net=tchsm --name knot-tchsm-demo -p ${EXPOSE_PORT}:53 -p 54:53/udp tchsm-demo-ubuntu14-knot
+    docker create --net=tchsm --name knot-tchsm-demo -p ${EXPOSE_PORT}:53 -p ${EXPOSE_PORT}:53/udp tchsm-demo-ubuntu14-knot
 
     # This will copy the configuration files into the container.
     # We're not using volumes because knot change file permissions.
