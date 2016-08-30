@@ -1,6 +1,6 @@
 # TCHSM Demo
 
-# Demo of an DNS server with DNSSEC support using the TCHSM
+# Demo of a DNS server with DNSSEC support using the TCHSM
 Docker based demo of the TCHSM as cryptographic backend for a knot DNS server implementing DNSSEC.
 
 ## Run the Demo
