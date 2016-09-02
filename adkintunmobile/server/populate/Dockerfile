@@ -10,25 +10,18 @@ RUN apt-get update && \
 		gcc \
 		git \
 		libpq-dev \
-		make \
-		wget
+		make
 
 # clone project
 RUN mkdir /adk && \
 	cd /adk && \
 	git clone https://github.com/niclabs/AdkintunMobile-Server.git && \
 	cd AdkintunMobile-Server && \
-	git checkout d7e23334d9894d5b724f04bce09efe19eb266d9b 
+	git checkout cf3a632bfab09e510093199c8d75eed5fac91d71 
 
 # install pip dependencies
 RUN cd /adk/AdkintunMobile-Server && \
 	pip install -r requirements.txt
-
-
-## Configuration
-# Clone antennas data file
-RUN cd /adk/AdkintunMobile-Server/app/data && \
-	wget --no-check-certificate 'https://docs.google.com/uc?export=download&id=0B3bt_QH0DLXzaWNTdDREV1ptcWM' -O initial_data_antennas.py
 
 
 ## Clean Up
@@ -37,8 +30,7 @@ RUN apt-get purge -y \
     gcc \
     git \
     libpq-dev \
-    make \
-    wget
+    make
 
 # cleaning up list of available packages
 RUN rm -rf /var/lib/apt/lists/*
@@ -50,5 +42,4 @@ CMD cd /adk/AdkintunMobile-Server && \
 	python manage.py db init && \
 	python manage.py db migrate && \
 	python manage.py db upgrade && \
-	python manage.py populate && \
-	python manage.py populate_antennas
+	python manage.py populate
