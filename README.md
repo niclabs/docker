@@ -2,7 +2,7 @@
 Repositoy to store Dockerfiles for Niclabs projects
 
 # Projects
-* ```adkintunmobile/``` [github.com/niclabs/adkintunmobile-server](https://www.github.com/niclabs/adkintunmobile-server)
+* ```adkintunmobile/```: Adkintun Mobile is an Android application project for monitoring QoS on mobile network. For more information, visit the repository [here](https://www.github.com/niclabs/adkintunmobile)
 * ```ratadns/```: RaTA DNS is a real time analytics project for DNS servers. Visit the repository [here](https://www.github.com/niclabs/ratadns).
 * ```tchsm/``` [github.com/niclabs/tchsm](https://www.github.com/niclabs/tchsm)
 
