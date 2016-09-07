@@ -2,7 +2,7 @@
 
 ## RaTA DNS
 
-Real time analytics for DNS servers, from the packets capture to the web visualization of the data. Project available [here](https://www.github.com/niclabs/ratadns).
+Real time analytics for DNS servers, from the capture of the DNS packets to the web visualization of the data. Project available [here](https://www.github.com/niclabs/ratadns).
 
 ## Description of docker images
 
@@ -24,4 +24,4 @@ Dockerfile to create container that runs an instance of Gopher, exposing port 80
 
 ### nginx
 
-Dockerfile that runs an nginx server necessary to run web visualization Remy.
+Dockerfile that runs an instance of Remy, using nginx as base image.
