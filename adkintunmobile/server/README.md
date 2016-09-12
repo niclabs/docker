@@ -3,7 +3,7 @@
 ## Adkintun Mobile Server
 Adkintun Mobile is an android application project for monitoring QoS on mobile network. For more information, visit the repository of the project [here](https://www.github.com/niclabs/adkintunmobile), or the repository of the server [here](https://www.github.com/niclabs/adkintunmobile-server)
 
-## Deploy Instruction
+## Deploy Instructions
 
 For deploy the adkintunmobile-server project:
 
