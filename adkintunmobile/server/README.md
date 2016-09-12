@@ -5,7 +5,7 @@ Adkintun Mobile is an android application project for monitoring QoS on mobile n
 
 ## Deploy Instructions
 
-For deploy the adkintunmobile-server project:
+To deploy the adkintunmobile-server project:
 
 * Edit the configuration file (`config.py`) with the desired values for the database name, user and password, and also with the data for the admin user in the application.
 * Run `run.sh`, giving the same database parameters used in the step 1, for the database container creation, following the next structure:
