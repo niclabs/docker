@@ -1,7 +1,7 @@
 #! /bin/bash
 
 function usage { 
-    echo "Usage: $0 build | run | start | stop | delete"; 
+    echo "Usage: $0 build | run | start | restart | stop | delete | upgrade_app"; 
     exit 1;
     }
 
@@ -112,6 +112,7 @@ function upgrade_app {
     cd "$DIR/server"
     docker build --tag server-adk .
 
+    cd "$DIR"
     # run container
     docker run --name server-adk --link postgres-adk:postgres -v $(pwd)/config.py:/adk/AdkintunMobile-Server/config.py --restart=unless-stopped --log-opt max-size=50m -d server-adk
 
