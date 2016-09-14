@@ -1,61 +1,146 @@
 #! /bin/bash
 
-usage() { echo "Usage: $0 [-u <string : user name> ] [-p <string : password>] [-d <string : database name>]"; exit 1; }
+function usage { 
+    echo "Usage: $0 build | run | start | stop | delete"; 
+    exit 1;
+    }
 
+function usage_run { 
+    echo "Usage: $0 run [-u <string : user name> ] [-p <string : password>] [-d <string : database name>]";
+    exit 1; 
+}
 
-args=`getopt -o u:p:d: -- "$@"`
-num=0
-
-eval set -- "$args"
-
-while true ; do
-    case "$1" in
-        -u)
-            u="$2"
-            shift 2
-            num=$((num+1))
-            ;;
-        -p) p="$2"
-            shift 2
-            num=$((num+1))
-            ;;
-        -d) d="$2" 
-            shift 2
-            num=$((num+1))
-            ;;
-        --) shift ; break ;;
-        *) usage ;;
-    esac
-done
-
-if (($num != 3))
-then
-    echo "You must use -u, -p and -d!";
-    usage;
-fi
-
-
-# Run the database docker
-# Give as parameter the database name, the user and the password. They must be the same in config.py
-docker run --name postgres-adk -e POSTGRES_PASSWORD=$p -e POSTGRES_USER=$u -e POSTGRES_DB=$d --restart=unless-stopped -p 5432:5432 --log-opt max-size=50m -d postgres
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-# Run the populate docker
-# Remember change the config.py file before!
-cd "$DIR/populate"
-docker build --tag populate-adk .
-cd "$DIR"
-docker run --name populate-adk --link postgres-adk:postgres -v $(pwd)/config.py:/adk/AdkintunMobile-Server/config.py --rm populate-adk
+function build {
+    # build the docker images
+    set -e
+
+    cd "$DIR/populate"
+    docker build --tag populate-adk .
+    cd "$DIR/server"
+    docker build --tag server-adk .
+}
 
 
-# Run uwsgi docker
-cd "$DIR/uwsgi"
-docker build --tag uwsgi-adk .
-cd "$DIR"
-docker run --name uwsgi-adk --link postgres-adk:postgres -v $(pwd)/config.py:/adk/AdkintunMobile-Server/config.py --restart=unless-stopped --log-opt max-size=50m -d uwsgi-adk
+function run {
+    # run the docker containers
+
+    args=`getopt -o u:p:d: -- "$@"`
+    num=0
+
+    eval set -- "$args"
+    while true ; do
+        case "$1" in
+            -u) u="$2"
+                shift 2
+                num=$((num+1))
+                ;;
+            -p) p="$2"
+                shift 2
+                num=$((num+1))
+                ;;
+            -d) d="$2" 
+                shift 2
+                num=$((num+1))
+                ;;
+            --) shift ; break ;;
+            *) usage_run ;;
+        esac
+    done
+
+    if (($num != 3))
+    then
+        echo "$num"
+        echo "You must use -u, -p and -d!";
+        usage_run;
+    fi
+    
+    cd "$DIR"
+
+    # Give as parameter the database name, the user and the password. They must be the same in config.py
+    docker run --name postgres-adk -e POSTGRES_PASSWORD=$p -e POSTGRES_USER=$u -e POSTGRES_DB=$d --restart=unless-stopped -p 5432:5432 --log-opt max-size=50m -d postgres
+    until nc -z $(docker inspect --format='{{.NetworkSettings.IPAddress}}' postgres-adk) 5432
+    do
+        echo "waiting for postgres container..."
+        sleep 0.5
+    done
+    # Remember change the config.py file before!
+
+    # Run populate docker
+    docker run --name populate-adk --link postgres-adk:postgres -v $(pwd)/config.py:/adk/AdkintunMobile-Server/config.py --rm populate-adk
+    # Run server docker
+    docker run --name server-adk --link postgres-adk:postgres -v $(pwd)/config.py:/adk/AdkintunMobile-Server/config.py --restart=unless-stopped --log-opt max-size=50m -d server-adk
+    # Run the nginx server docker
+    docker run --name nginx-adk -v $(pwd)/nginx.conf:/etc/nginx/conf.d/adk.conf:ro --link server-adk:server-adk -p 80:80 --restart=unless-stopped --log-opt max-size=50m -d nginx
+}
+
+function stop {
+    #Stop the aplication
+
+    docker stop postgres-adk server-adk nginx-adk
+}
 
 
-# Run the nginx server docker
-cd "$DIR"
-docker run --name nginx-adk -v $(pwd)/nginx.conf:/etc/nginx/conf.d/adk.conf:ro --link uwsgi-adk:uwsgi-adk -p 80:80 --restart=unless-stopped --log-opt max-size=50m -d nginx
+function start {
+    #start the aplication
+
+    docker start postgres-adk server-adk nginx-adk 
+}
+
+function restart {
+    #start the aplication
+
+    docker restart postgres-adk server-adk nginx-adk 
+}
+
+
+function delete {
+    #Stop application and delete all data
+    stop;
+    docker rm -f postgres-adk server-adk nginx-adk
+}
+
+
+function upgrade_app {
+    # delete container server
+    docker stop server-adk
+    docker rm -f server-adk
+
+    # build container server
+    cd "$DIR/server"
+    docker build --tag server-adk .
+
+    # run container
+    docker run --name server-adk --link postgres-adk:postgres -v $(pwd)/config.py:/adk/AdkintunMobile-Server/config.py --restart=unless-stopped --log-opt max-size=50m -d server-adk
+
+}
+
+case "$1" in
+    run)
+        run $@
+        ;;
+    build)
+        build
+        ;;
+    start)
+        start
+        ;;
+    restart)
+        restart
+        ;;     
+    stop)
+        stop
+        ;;    
+    delete)
+        delete
+        ;;   
+    upgrade_app)
+        upgrade_app
+        ;;   
+    *) usage ;;
+esac
+
+
+
