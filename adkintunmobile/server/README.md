@@ -13,7 +13,7 @@ To deploy the adkintunmobile-server project:
   ```shell
   $ ./run.sh build
   ```
-3. After, run the containers , giving as parameters the database name, the username and the password of the database (the same given in the step 1):
+3. After, run the containers, giving as parameters the database name, the username and the password of the database (the same given in the step 1):
 
   ```shell
   $ ./run.sh run [-u <string : user_name_database> ] [-p <string : password>] [-d <string : database_name>]
@@ -30,13 +30,13 @@ Dockerfile for the server application.
 File with the differents settings for the application
 
 ### run.sh
-Bash script for deploy, run, start, restart, and stop the application. The usage is:
+Bash script to deploy, run, start, restart, and stop the application. The usage is:
 
 
 ```bash
-# For build, start, restart, stop, delete, upgrade
-$ ./run.sh build | start | restart | stop | delete | upgrade_app
+# To build, start, restart, stop, delete, upgrade
+$ ./run.sh build | start | restart | stop | delete | upgrade
 
-# For run
+# To run
 $ ./run.sh run [-u <string : user_name_database> ] [-p <string : password>] [-d <string : database_name>]
 ```
