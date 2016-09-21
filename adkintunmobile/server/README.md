@@ -7,19 +7,36 @@ Adkintun Mobile is an android application project for monitoring QoS on mobile n
 
 To deploy the adkintunmobile-server project:
 
-* Edit the configuration file (`config.py`) with the desired values for the database name, user and password, and also with the data for the admin user in the application.
-* Run `run.sh`, giving the same database parameters used in the step 1, for the database container creation, following the next structure:
+1. Edit the configuration file (`config.py`) with the desired values for the database name, user and password, and also with the data for the admin user in the application.
+2. Build the docker images using the following command
 
+  ```shell
+  $ ./run.sh build
+  ```
+3. After, run the containers, giving as parameters the database name, the username and the password of the database (the same given in the step 1):
 
-```bash
-$ ./run.sh [-u <string : user_name_database> ] [-p <string : password>] [-d <string : database_name>]
-```
-
-
+  ```shell
+  $ ./run.sh run [-u <string : user_name_database> ] [-p <string : password>] [-d <string : database_name>]
+  ```
 ## Content
 
 ### populate
 Dockerfile for populate the server with initial information.
 
-### uwsgi
+### server
 Dockerfile for the server application.
+
+### config.py
+File with the differents settings for the application
+
+### run.sh
+Bash script to deploy, run, start, restart, and stop the application. The usage is:
+
+
+```bash
+# To build, start, restart, stop, delete, upgrade
+$ ./run.sh build | start | restart | stop | delete | upgrade
+
+# To run
+$ ./run.sh run [-u <string : user_name_database> ] [-p <string : password>] [-d <string : database_name>]
+```
