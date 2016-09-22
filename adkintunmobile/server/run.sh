@@ -1,7 +1,7 @@
 #! /bin/bash
 
 function usage { 
-    echo "Usage: $0 build | run | start | restart | stop | delete | upgrade_app"; 
+    echo "Usage: $0 build | run | start | restart | stop | delete | upgrade"; 
     exit 1;
     }
 
@@ -103,7 +103,7 @@ function delete {
 }
 
 
-function upgrade_app {
+function upgrade {
     # delete container server
     docker stop server-adk
     docker rm -f server-adk
@@ -137,8 +137,8 @@ case "$1" in
     delete)
         delete
         ;;   
-    upgrade_app)
-        upgrade_app
+    upgrade)
+        upgrade
         ;;   
     *) usage ;;
 esac
