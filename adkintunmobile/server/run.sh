@@ -60,7 +60,9 @@ function run {
     cd "$DIR"
 
     # Give as parameter the database name, the user and the password. They must be the same in config.py
-    docker run --name postgres-adk -e POSTGRES_PASSWORD=$p -e POSTGRES_USER=$u -e POSTGRES_DB=$d --restart=unless-stopped -p 5432:5432 --log-opt max-size=50m -d postgres
+    docker run --name postgres-adk -e POSTGRES_PASSWORD=$p -e POSTGRES_USER=$u -e POSTGRES_DB=$d --restart=unless-stopped \
+    -p 5432:5432 -v /etc/localtime:/etc/localtime:ro --log-opt max-size=50m -d postgres
+
     until nc -z $(docker inspect --format='{{.NetworkSettings.IPAddress}}' postgres-adk) 5432
     do
         echo "waiting for postgres container..."
@@ -69,11 +71,15 @@ function run {
     # Remember change the config.py file before!
 
     # Run populate docker
-    docker run --name populate-adk --link postgres-adk:postgres -v $(pwd)/config.py:/adk/AdkintunMobile-Server/config.py --rm populate-adk
+    docker run --name populate-adk --link postgres-adk:postgres -v $(pwd)/config.py:/adk/AdkintunMobile-Server/config.py \
+    --rm populate-adk
     # Run server docker
-    docker run --name server-adk --link postgres-adk:postgres -v $(pwd)/config.py:/adk/AdkintunMobile-Server/config.py --restart=unless-stopped --log-opt max-size=50m -d server-adk
+    docker run --name server-adk --link postgres-adk:postgres -v $(pwd)/config.py:/adk/AdkintunMobile-Server/config.py \
+    -v $(pwd)/reports/:/adk/AdkintunMobile-Server/app/static/reports/ -v /etc/localtime:/etc/localtime:ro --restart=unless-stopped \
+    --log-opt max-size=50m -d server-adk
     # Run the nginx server docker
-    docker run --name nginx-adk -v $(pwd)/nginx.conf:/etc/nginx/conf.d/adk.conf:ro --link server-adk:server-adk -p 80:80 --restart=unless-stopped --log-opt max-size=50m -d nginx
+    docker run --name nginx-adk -v $(pwd)/nginx.conf:/etc/nginx/conf.d/adk.conf:ro --link server-adk:server-adk -p 80:80 \
+    -v /etc/localtime:/etc/localtime:ro  --restart=unless-stopped --log-opt max-size=50m -d nginx
 }
 
 function stop {
@@ -114,7 +120,9 @@ function upgrade {
 
     cd "$DIR"
     # run container
-    docker run --name server-adk --link postgres-adk:postgres -v $(pwd)/config.py:/adk/AdkintunMobile-Server/config.py --restart=unless-stopped --log-opt max-size=50m -d server-adk
+    docker run --name server-adk --link postgres-adk:postgres -v $(pwd)/config.py:/adk/AdkintunMobile-Server/config.py \
+    -v $(pwd)/reports/:/adk/AdkintunMobile-Server/app/static/reports/ -v /etc/localtime:/etc/localtime:ro --restart=unless-stopped \
+    --log-opt max-size=50m -d server-adk
 
 }
 
