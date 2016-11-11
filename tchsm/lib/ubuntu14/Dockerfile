@@ -49,7 +49,7 @@ RUN wget https://github.com/niclabs/tchsm-libtc/archive/master.zip \
 RUN cd /tmp && mkdir libdtc && cd libdtc \
  && git clone https://github.com/niclabs/tchsm-libdtc.git \
  && cd tchsm-libdtc \
- && git checkout 2af808cd98b6a35b5a8d4245c2fe29b83127546e \
+ && git checkout v0.1 \
  && mkdir build && cd build \
  && cmake -DBUILD_TESTING=OFF .. \
  && sudo make install \
