@@ -28,6 +28,7 @@ RUN wget https://github.com/niclabs/tchsm-libtc/archive/master.zip \
 RUN cd /tmp && mkdir libdtc && cd libdtc \
  && git clone https://github.com/niclabs/tchsm-libdtc.git \
  && cd tchsm-libdtc \
+ && git checkout v0.1 \
  && mkdir build && cd build \
  && cmake -DBUILD_TESTING=OFF .. \
  && make install \
