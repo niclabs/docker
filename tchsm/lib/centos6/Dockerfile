@@ -22,7 +22,7 @@ ENV PKG_CONFIG_PATH ${PKG_CONFIG_PATH}:/usr/local/lib/pkgconfig
 ENV CXX /opt/rh/devtoolset-2/root/usr/bin/g++
 ENV CC /opt/rh/devtoolset-2/root/usr/bin/cc
 
-RUN mkdir pgp_keys && ls
+RUN mkdir pgp_keys
 
 COPY gpg_keys/ gpg_keys/
 
