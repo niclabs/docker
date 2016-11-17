@@ -73,3 +73,6 @@ RUN cd /tmp && mkdir libdtc && cd libdtc \
  && mkdir build && cd build \
  && cmake  .. \
  && make install
+
+RUN yum remove -y devtoolset-2-gcc devtoolset-2-binutils devtoolset-2-gcc-c++
+RUN rm /etc/yum.repos.d/devtools-2.repo
