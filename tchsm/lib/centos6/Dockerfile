@@ -22,7 +22,15 @@ ENV PKG_CONFIG_PATH ${PKG_CONFIG_PATH}:/usr/local/lib/pkgconfig
 ENV CXX /opt/rh/devtoolset-2/root/usr/bin/g++
 ENV CC /opt/rh/devtoolset-2/root/usr/bin/cc
 
+RUN mkdir pgp_keys && ls
+
+COPY gpg_keys/ gpg_keys/
+
+RUN gpg --import /gpg_keys/botan.gpg /gpg_keys/libsodium.gpg
+
 RUN curl -LO https://download.libsodium.org/libsodium/releases/libsodium-1.0.9.tar.gz \
+ && curl -LO https://download.libsodium.org/libsodium/releases/libsodium-1.0.9.tar.gz.sig \
+ && gpg --verify libsodium-1.0.9.tar.gz.sig libsodium-1.0.9.tar.gz \
  && tar -xzC /tmp -f libsodium-1.0.9.tar.gz && rm libsodium-1.0.9.tar.gz \
  && cd /tmp/libsodium-1.0.9/ && ./configure && make && make install \
  && cd / && rm -r /tmp/libsodium-1.0.9
@@ -35,6 +43,8 @@ RUN curl -LO https://github.com/zeromq/zeromq4-1/releases/download/v4.1.4/zeromq
  && cd / && rm -r /tmp/zeromq-4.1.4
 
 RUN curl -LO  http://botan.randombit.net/releases/Botan-1.10.13.tgz \
+ && curl -LO  http://botan.randombit.net/releases/Botan-1.10.13.tgz.asc \
+ && gpg --verify Botan-1.10.13.tgz.asc Botan-1.10.13.tgz \
  && tar -xzC /tmp -f Botan-1.10.13.tgz && rm Botan-1.10.13.tgz \
  && cd /tmp/Botan-1.10.13 && ./configure.py --cc-bin=${CC} && make && make install \
  && cd / && rm -r /tmp/Botan-1.10.13
