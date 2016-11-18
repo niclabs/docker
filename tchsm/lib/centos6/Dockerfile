@@ -57,6 +57,7 @@ RUN curl -LO http://ufpr.dl.sourceforge.net/project/mhash/mhash/0.9.9.9/mhash-0.
  && cd / && rm -r /tmp/mhash-0.9.9.9
 
 RUN curl -LO http://www.hyperrealm.com/libconfig/libconfig-1.5.tar.gz \
+ && echo '24306c7efce07669a4053d0977a45e2f3a3add79  libconfig-1.5.tar.gz' | sha1sum -c \
  && tar -xzC /tmp -f libconfig-1.5.tar.gz && rm libconfig-1.5.tar.gz \
  && cd /tmp/libconfig-1.5 && ./configure && make install \
  && cd / && rm -r /tmp/libconfig-1.5
