@@ -14,7 +14,8 @@ RUN yum install -y \
             libuuid-devel \
             make \
             m4 \
-            sqlite-devel
+            sqlite-devel \
+            wget
 
 RUN curl -L https://people.centos.org/tru/devtools-2/devtools-2.repo -o /etc/yum.repos.d/devtools-2.repo && yum install -y devtoolset-2-gcc devtoolset-2-binutils devtoolset-2-gcc-c++
 
@@ -64,12 +65,9 @@ RUN cd /tmp && mkdir libtc && cd libtc \
  && git clone https://github.com/niclabs/tchsm-libtc.git \
  && cd tchsm-libtc && mkdir build && cd build && cmake .. && make install
 
-
-RUN cd /tmp && mkdir libdtc && cd libdtc \
- && git clone https://github.com/niclabs/tchsm-libdtc.git \
- && cd tchsm-libdtc \
-# TODO TEMPORAL
-# && git checkout a9a3e299a46 \
+RUN wget http://github.com/niclabs/tchsm-libdtc/archive/v0.1.tar.gz \
+ && tar -xzC /tmp -f v0.1.tar.gz && rm v0.1.tar.gz \
+ && cd /tmp/tchsm-libdtc-0.1 \
  && mkdir build && cd build \
  && cmake  .. \
  && make install
