@@ -23,7 +23,7 @@ ENV PKG_CONFIG_PATH ${PKG_CONFIG_PATH}:/usr/local/lib/pkgconfig
 ENV CXX /opt/rh/devtoolset-2/root/usr/bin/g++
 ENV CC /opt/rh/devtoolset-2/root/usr/bin/cc
 
-RUN mkdir pgp_keys
+RUN mkdir gpg_keys
 
 COPY gpg_keys/ gpg_keys/
 
@@ -67,11 +67,13 @@ RUN cd /tmp && mkdir libtc && cd libtc \
  && cd tchsm-libtc && mkdir build && cd build && cmake .. && make install
 
 RUN wget http://github.com/niclabs/tchsm-libdtc/archive/v0.1.tar.gz \
+ && echo 'fea5b5e61430daec2a33a46b002fd3358bf3e9a2  v0.1.tar.gz' | sha1sum -c \
  && tar -xzC /tmp -f v0.1.tar.gz && rm v0.1.tar.gz \
  && cd /tmp/tchsm-libdtc-0.1 \
  && mkdir build && cd build \
- && cmake  .. \
- && make install
+ && cmake -DBUILD_TESTING=OFF .. \
+ && make install \
+ && cd / && rm -r /tmp/tchsm-libdtc-0.1
 
 RUN yum remove -y devtoolset-2-gcc devtoolset-2-binutils devtoolset-2-gcc-c++ \
  &&  rm /etc/yum.repos.d/devtools-2.repo
