@@ -19,11 +19,7 @@ RUN yum install -y \
 
 RUN yum install -y gcc gcc-c++
 
-# RUN curl -L https://people.centos.org/tru/devtools-2/devtools-2.repo -o /etc/yum.repos.d/devtools-2.repo && yum install -y devtoolset-2-gcc devtoolset-2-binutils devtoolset-2-gcc-c++
-
 ENV PKG_CONFIG_PATH ${PKG_CONFIG_PATH}:/usr/local/lib/pkgconfig
-# ENV CXX /opt/rh/devtoolset-2/root/usr/bin/g++
-# ENV CC /opt/rh/devtoolset-2/root/usr/bin/cc
 
 RUN mkdir gpg_keys
 
