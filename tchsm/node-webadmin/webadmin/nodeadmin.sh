@@ -1,6 +1,6 @@
 #! /usr/bin/env bash
 
-usage () { echo "Usage: $0 build | start | stop"; exit 1; }
+usage () { echo "Usage: $0 build | start | start-http | stop"; exit 1; }
 NODEADMIN_DIR_=`dirname $0`
 NODEADMIN_DIR=`readlink -e $NODEADMIN_DIR_`
 
@@ -18,6 +18,13 @@ function build {
 }
 
 function start {
+    set -e
+
+    docker run -it -v ${NODEADMIN_DIR}/conf:/home/nodeadmin/tchsm-nodeadmin/conf\
+               --name tchsm-nodeadmin -e "NODEADMIN_HTTP=1" tchsm-nodeadmin
+}
+
+function starthttps {
     set -e
 
     docker run -it -v ${NODEADMIN_DIR}/conf:/home/nodeadmin/tchsm-nodeadmin/conf\
@@ -39,6 +46,9 @@ case "$1" in
         ;;
     start)
         start
+        ;;
+    start-https)
+        starthttps
         ;;
     *)
         usage

@@ -49,25 +49,24 @@ RUN mkdir /home/node \
  && cd / && cp /home/node/tchsm-libdtc/scripts/create_config.py /usr/local/bin \
  && chmod +x /usr/local/bin/create_config.py && rm -r /home/node
 
+RUN pip install uwsgi
+
 # Clone project
 RUN mkdir /home/nodeadmin \
  && cd /home/nodeadmin \
  && git clone https://github.com/niclabs/tchsm-nodeadmin \
+#  && git clone file:///home/fmontoto/Projects/tchsm-nodeadmin/.git/ \
  && cd tchsm-nodeadmin \
  #TODO checkout to a release or commit.
- && git checkout b61299
+ && git checkout f9e657b
 
 RUN pip install -r /home/nodeadmin/tchsm-nodeadmin/requirements.txt
 
 COPY supervisor.conf /home/nodeadmin/tchsm-nodeadmin
 COPY uwsgi.ini /home/nodeadmin/tchsm-nodeadmin
 
-RUN pip install uwsgi
-
 WORKDIR /home/nodeadmin/tchsm-nodeadmin
 
-ENV NODE_DB_PATH /home
-#ENV NODE_CONF_PATH <path-al-nodo>
+ENV NODE_CONF_PATH /home/nodeadmin/tchsm-nodeadmin/conf/node.conf
 
-#CMD ["bash"]
 CMD ["/home/nodeadmin/tchsm-nodeadmin/conf/start.sh"]
