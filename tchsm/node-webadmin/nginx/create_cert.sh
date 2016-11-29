@@ -1,3 +1,11 @@
 #!/usr/bin/env bash
 
-openssl req -newkey rsa:2048 -sha256 -nodes -keyout key.pem -x509 -days 365 -out cert.pem -subj "/C=CL/ST=Metropolitana/L=Santiago/O=NICLabsChile/CN=127.0.0.1"
+if [ $# -eq 0 ]
+then
+    echo "No output dir supplied, using working directory as output"
+    OUT_DIR=`pwd`
+else
+    OUT_DIR=$1
+fi
+
+openssl req -newkey rsa:2048 -sha256 -nodes -keyout ${OUT_DIR}/key.pem -x509 -days 365 -out ${OUT_DIR}/cert.pem -subj "/C=CL/ST=Metropolitana/L=Santiago/O=NICLabsChile/CN=127.0.0.1"

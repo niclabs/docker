@@ -55,7 +55,6 @@ RUN pip install uwsgi
 RUN mkdir /home/nodeadmin \
  && cd /home/nodeadmin \
  && git clone https://github.com/niclabs/tchsm-nodeadmin \
-#  && git clone file:///home/fmontoto/Projects/tchsm-nodeadmin/.git/ \
  && cd tchsm-nodeadmin \
  #TODO checkout to a release or commit.
  && git checkout f9e657b
