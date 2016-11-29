@@ -23,7 +23,7 @@ function start {
     DIR_=`dirname $0`
     DIR=`readlink -e $DIR_`
 
-    docker run -it --net=tchsm-nodeadmin -v ${DIR}/conf:/etc/nginx/conf.d/ --name tchsm-nginx tchsm-nginx
+    docker run -d --net=tchsm-nodeadmin -p 443:443 -v ${DIR}/conf:/etc/nginx/conf.d/ --name tchsm-nginx tchsm-nginx
 
 
 

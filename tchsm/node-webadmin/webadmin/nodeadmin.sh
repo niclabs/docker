@@ -19,14 +19,15 @@ function build {
 
 function start {
 
-    docker run -it -v ${NODEADMIN_DIR}/conf:/home/nodeadmin/tchsm-nodeadmin/conf\
-               --name tchsm-nodeadmin --net=tchsm-nodeadmin -e "NODEADMIN_HTTP=1" tchsm-nodeadmin
+    docker run -d -v ${NODEADMIN_DIR}/conf:/home/nodeadmin/tchsm-nodeadmin/conf\
+               --name tchsm-nodeadmin --net=tchsm-nodeadmin -e "NODEADMIN_HTTP=1"\
+               -p 80:80 tchsm-nodeadmin
 }
 
 function starthttps {
 
-    docker run -it -v ${NODEADMIN_DIR}/conf:/home/nodeadmin/tchsm-nodeadmin/conf\
-               --name tchsm-nodeadmin -p 7787:7787 --net=tchsm-nodeadmin tchsm-nodeadmin
+    docker run -d -v ${NODEADMIN_DIR}/conf:/home/nodeadmin/tchsm-nodeadmin/conf\
+               --name tchsm-nodeadmin --net=tchsm-nodeadmin tchsm-nodeadmin
 }
 
 function stop {
