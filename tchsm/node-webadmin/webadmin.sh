@@ -8,6 +8,7 @@ DIR=`readlink -e $DIR_`
 function starthttps {
     set -e
 
+    docker network create -d bridge tchsm-nodeadmin
     ${DIR}/webadmin/nodeadmin.sh start-https
     ${DIR}/nginx/nginx.sh start
 }
@@ -15,11 +16,13 @@ function starthttps {
 function startuwsgi {
     set -e
 
+    docker network create -d bridge tchsm-nodeadmin
     ${DIR}/webadmin/nodeadmin.sh start-https
 }
 
 function starthttp {
     set -e
+    docker network create -d bridge tchsm-nodeadmin
     ${DIR}/webadmin/nodeadmin.sh start
 }
 
@@ -33,6 +36,7 @@ function build {
 function stop {
     ${DIR}/webadmin/nodeadmin.sh stop
     ${DIR}/nginx/nginx.sh stop 2>/dev/null
+    docker network rm tchsm-nodeadmin 2>>/dev/null
 }
 
 case "$1" in
