@@ -2,6 +2,8 @@
 
 usage () { echo "Usage: $0 build | start | stop"; exit 1; }
 
+EXPOSE_HTTPS_PORT=443
+
 function create_conf_files {
     if [ ! -f ${DIR}/conf/cert.pem ];
     then
@@ -23,9 +25,8 @@ function start {
     DIR_=`dirname $0`
     DIR=`readlink -e $DIR_`
 
-    docker run -d --net=tchsm-nodeadmin -p 443:443 -v ${DIR}/conf:/etc/nginx/conf.d/ --name tchsm-nginx tchsm-nginx
-
-
+    docker run -d --net=tchsm-nodeadmin -p 0.0.0.0:${EXPOSE_HTTPS_PORT}:443 \
+               -v ${DIR}/conf:/etc/nginx/conf.d/ --name tchsm-nginx tchsm-nginx
 
 }
 

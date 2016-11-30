@@ -4,6 +4,10 @@ usage () { echo "Usage: $0 build | start | start-https | stop"; exit 1; }
 NODEADMIN_DIR_=`dirname $0`
 NODEADMIN_DIR=`readlink -e $NODEADMIN_DIR_`
 
+EXPOSE_HTTP_PORT=80
+EXPOSE_NODE_ROUTER_PORT=2121
+EXPOSE_NODE_SUB_PORT=2222
+
 function build {
     set -e
 
@@ -19,15 +23,18 @@ function build {
 
 function start {
 
-    docker run -d -v ${NODEADMIN_DIR}/conf:/home/nodeadmin/tchsm-nodeadmin/conf\
-               --name tchsm-nodeadmin --net=tchsm-nodeadmin -e "NODEADMIN_HTTP=1"\
-               -p 80:80 tchsm-nodeadmin
+    docker run -d -v ${NODEADMIN_DIR}/conf:/home/nodeadmin/tchsm-nodeadmin/conf \
+               --name tchsm-nodeadmin --net=tchsm-nodeadmin -e "NODEADMIN_HTTP=1" \
+               -p 0.0.0.0:${EXPOSE_HTTP_PORT}:80 -p 0.0.0.0:${EXPOSE_NODE_ROUTER_PORT}:2121 \
+               -p 0.0.0.0:${EXPOSE_NODE_SUB_PORT}:2222 tchsm-nodeadmin
 }
 
 function starthttps {
 
-    docker run -d -v ${NODEADMIN_DIR}/conf:/home/nodeadmin/tchsm-nodeadmin/conf\
-               --name tchsm-nodeadmin --net=tchsm-nodeadmin tchsm-nodeadmin
+    docker run -d -v ${NODEADMIN_DIR}/conf:/home/nodeadmin/tchsm-nodeadmin/conf \
+               --name tchsm-nodeadmin --net=tchsm-nodeadmin \
+               -p 0.0.0.0:${EXPOSE_NODE_ROUTER_PORT}:2121 \
+               -p 0.0.0.0:${EXPOSE_NODE_SUB_PORT}:2222 tchsm-nodeadmin
 }
 
 function stop {
