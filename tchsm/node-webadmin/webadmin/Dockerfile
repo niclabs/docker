@@ -68,4 +68,11 @@ WORKDIR /home/nodeadmin/tchsm-nodeadmin
 
 ENV NODE_CONF_PATH /home/nodeadmin/tchsm-nodeadmin/conf/node.conf
 
+RUN apt-get --purge remove -y cmake \
+                              curl \
+                              g++ \
+                              gcc \
+                              git \
+                              make
+
 CMD ["/home/nodeadmin/tchsm-nodeadmin/conf/start.sh"]
