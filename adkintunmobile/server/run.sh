@@ -75,7 +75,7 @@ function run {
     --rm populate-adk
     # Run server docker
     docker run --name server-adk --link postgres-adk:postgres -v $(pwd)/config.py:/adk/AdkintunMobile-Server/config.py \
-    -v $(pwd)/reports/:/adk/AdkintunMobile-Server/app/static/reports/ -v /etc/localtime:/etc/localtime:ro --restart=unless-stopped \
+    -v $(pwd)/reports:/adk/AdkintunMobile-Server/app/static/reports -v /etc/localtime:/etc/localtime:ro --restart=unless-stopped \
     --log-opt max-size=50m -d server-adk
     # Run the nginx server docker
     docker run --name nginx-adk -v $(pwd)/nginx.conf:/etc/nginx/conf.d/adk.conf:ro --link server-adk:server-adk -p 80:80 \
@@ -121,7 +121,7 @@ function upgrade {
     cd "$DIR"
     # run container
     docker run --name server-adk --link postgres-adk:postgres -v $(pwd)/config.py:/adk/AdkintunMobile-Server/config.py \
-    -v $(pwd)/reports/:/adk/AdkintunMobile-Server/app/static/reports/ -v /etc/localtime:/etc/localtime:ro --restart=unless-stopped \
+    -v $(pwd)/reports:/adk/AdkintunMobile-Server/app/static/reports -v /etc/localtime:/etc/localtime:ro --restart=unless-stopped \
     --log-opt max-size=50m -d server-adk
 
 }
