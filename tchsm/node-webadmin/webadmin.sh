@@ -6,9 +6,10 @@ DIR_=`dirname $0`
 DIR=`readlink -e $DIR_`
 
 function starthttps {
+
+    docker network create -d bridge tchsm-nodeadmin 2>>/dev/null
     set -e
 
-    docker network create -d bridge tchsm-nodeadmin
     ${DIR}/webadmin/nodeadmin.sh start-https
     ${DIR}/nginx/nginx.sh start
 }
