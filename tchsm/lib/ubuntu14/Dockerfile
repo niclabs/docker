@@ -53,6 +53,7 @@ RUN wget http://botan.randombit.net/releases/Botan-1.11.29.tgz \
  && cd / && rm -r /tmp/Botan-1.11.29
 
 RUN wget https://github.com/niclabs/tchsm-libtc/archive/master.zip \
+ && echo 'ac6f7198cd8e76a429be65ebfb848c46bcdb3e1c' master.zip | sha1sum -c \
  && unzip master.zip -d /tmp && rm master.zip \
  && cd /tmp/tchsm-libtc-master && mkdir build && cd build && cmake -DBUILD_TESTING=OFF .. && sudo make install \
  && cd / && rm -r /tmp/tchsm-libtc-master

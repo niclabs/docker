@@ -21,6 +21,7 @@ RUN apt-get install -y --no-install-recommends \
         wget
 
 RUN wget https://github.com/niclabs/tchsm-libtc/archive/master.zip \
+ && echo 'ac6f7198cd8e76a429be65ebfb848c46bcdb3e1c' master.zip | sha1sum -c \
  && unzip master.zip -d /tmp && rm master.zip \
  && cd /tmp/tchsm-libtc-master && mkdir build && cd build && cmake -DBUILD_TESTING=OFF .. && make install \
  && cd / && rm -r /tmp/tchsm-libtc-master
