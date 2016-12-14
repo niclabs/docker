@@ -15,6 +15,7 @@ RUN yum install -y \
             make \
             m4 \
             sqlite-devel \
+            unzip \
             wget
 
 RUN yum install -y gcc gcc-c++
@@ -60,9 +61,12 @@ RUN curl -LO http://www.hyperrealm.com/libconfig/libconfig-1.5.tar.gz \
  && cd /tmp/libconfig-1.5 && ./configure && make install \
  && cd / && rm -r /tmp/libconfig-1.5
 
-RUN cd /tmp && mkdir libtc && cd libtc \
- && git clone https://github.com/niclabs/tchsm-libtc.git \
- && cd tchsm-libtc && mkdir build && cd build && cmake .. && make install
+RUN wget https://github.com/niclabs/tchsm-libtc/archive/v0.2.tar.gz \
+ && echo '83b28ef1c123777f17548228a32fd1f2f42ec2f3  v0.2.tar.gz' | sha1sum -c \
+ && tar -xzC /tmp -f v0.2.tar.gz && rm v0.2.tar.gz \
+ && cd /tmp/tchsm-libtc-0.2 && mkdir build \
+ && cd build && cmake -DBUILD_TESTING=OFF .. && make install \
+ && cd / && rm -r /tmp/tchsm-libtc-0.2
 
 RUN wget http://github.com/niclabs/tchsm-libdtc/archive/v0.1.tar.gz \
  && echo 'fea5b5e61430daec2a33a46b002fd3358bf3e9a2  v0.1.tar.gz' | sha1sum -c \
