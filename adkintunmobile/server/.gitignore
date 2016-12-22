@@ -1,0 +1,4 @@
+# ignore files of temporal folders
+tmp/*
+dumps/*
+reports/*
