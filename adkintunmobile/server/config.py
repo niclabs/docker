@@ -4,12 +4,12 @@ class DefaultConfig(object):
     CSRF_ENABLED = True
     SECRET_KEY = "this-really-needs-to-be-changed"
     USER = "this-really-needs-to-be-changed"
-    SQLALCHEMY_DATABASE_URI = "postgresql://" + USER + ":" + SECRET_KEY + "@localhost/this-really-needs-to-be-changed"
+    SQLALCHEMY_DATABASE_URI = "postgresql://" + USER + ":" + SECRET_KEY + "@postgres-adk/this-really-needs-to-be-changed"
     SQLALCHEMY_TRACK_MODIFICATIONS = True
 
 
 class TestingConfig(DefaultConfig):
-    SQLALCHEMY_DATABASE_URI = "postgresql://user_test:password_test@localhost/adkintun_test"
+    SQLALCHEMY_DATABASE_URI = "postgresql://user_test:password_test@postgres-adk/adkintun_test"
     PRESERVE_CONTEXT_ON_EXCEPTION = False
     TESTING = True
     DEBUG = True
