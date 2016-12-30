@@ -40,3 +40,6 @@ $ ./run.sh build | start | restart | stop | delete | upgrade
 # To run
 $ ./run.sh run [-u <string : user_name_database> ] [-p <string : password>] [-d <string : database_name>]
 ```
+
+Hint: Normally, you will just use the command `upgrade`, what will upgrade the new version of Adkintun Mobile (new commit specified in the server folder Dockerfile), keeping the postgres and the nginx docker working, connecting itself to them after upgrade.
+
