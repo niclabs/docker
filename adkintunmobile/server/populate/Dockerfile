@@ -17,7 +17,7 @@ RUN mkdir /adk && \
 	cd /adk && \
 	git clone https://github.com/niclabs/AdkintunMobile-Server.git && \
 	cd AdkintunMobile-Server && \
-	git checkout 2894b04522fb195e439dd7dd470b18de2c5d0d46 
+	git checkout 3c5e7523ac2d2c62dee784ba7c0dcee1f0fa5c27 
 
 
 
