@@ -17,7 +17,8 @@ RUN mkdir /adk && \
 	cd /adk && \
 	git clone https://github.com/niclabs/AdkintunMobile-Server.git && \
 	cd AdkintunMobile-Server && \
-	git checkout 9f24adb2e1768977d5bcce45edf0197617dc768a 
+	git checkout 3c5e7523ac2d2c62dee784ba7c0dcee1f0fa5c27 
+
 
 
 # install pip dependencies
