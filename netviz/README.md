@@ -2,7 +2,7 @@
 
 ## Net-viz
 Net-viz is a web application for the visualization and modification of physical networks.
-For more information visit the project's [repository](https://www.github.com/niclabs/net-viz)
+For more information visit the project's [repository](https://www.github.com/niclabs/net-viz).
 
 ## Deploy Instructions
 
@@ -14,7 +14,8 @@ To deploy the net-viz project:
   ```shell
   $ ./run.sh build
   ```
-3. Create and populate the database giving as parameters the database name, the username and the password of the database (the same given in the step 1):
+3. Create and populate the database giving as parameters the database name, the username and the password of the database (same as the ones given in the step 1):
+
   ```shell
   $ ./run.sh populate [-u <string : user_name_database> ] [-p <string : password>] [-d <string : database_name>]
   ```
@@ -23,6 +24,7 @@ To deploy the net-viz project:
   ```shell
   $ ./run.sh run [-u <string : user_name_database> ] [-p <string : password>] [-d <string : database_name>]
   ```
+
 ## Content
 
 ### populate
