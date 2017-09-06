@@ -21,6 +21,8 @@ function build {
     docker build --tag populate-adk .
     cd "$DIR/server"
     docker build --tag server-adk .
+    cd "$DIR/reports"
+    docker build --tag reports-adk .
 }
 
 
@@ -75,37 +77,42 @@ function run {
     --rm populate-adk
     # Run server docker
     docker run --name server-adk --link postgres-adk:postgres -v $(pwd)/config.py:/adk/AdkintunMobile-Server/config.py \
-    -v $(pwd)/reports:/adk/AdkintunMobile-Server/app/static/reports -v $(pwd)/tmp:/adk/AdkintunMobile-Server/tmp \
-    -v /etc/localtime:/etc/localtime:ro --restart=unless-stopped --log-opt max-size=50m -d server-adk
+    -v $(pwd)/tmp:/adk/AdkintunMobile-Server/tmp -v /etc/localtime:/etc/localtime:ro --restart=unless-stopped --log-opt\
+    max-size=50m -d server-adk
+    # Run reports docker
+    docker run --name reports-adk --link postgres-adk:postgres -v $(pwd)/reports/config.py:/adk/adkintun-reports/config.py \
+    -v $(pwd)/reports:/adk/adkintun-reports/app/static/reports -v $(pwd)/reports/tmp:/adk/adkintun-reports/tmp \
+    -v /etc/localtime:/etc/localtime:ro --restart=unless-stopped --log-opt max-size=50m -d reports-adk
     # Run the nginx server docker
-    docker run --name nginx-adk -v $(pwd)/nginx.conf:/etc/nginx/conf.d/adk.conf:ro --link server-adk:server-adk -p 80:80 \
-    -v /etc/localtime:/etc/localtime:ro  --restart=unless-stopped --log-opt max-size=50m -d nginx
+    docker run --name nginx-adk -v $(pwd)/nginx.conf:/etc/nginx/conf.d/adk.conf:ro --link server-adk:server-adk\
+    --link reports-adk:reports-adk -p 80:80 -v /etc/localtime:/etc/localtime:ro  --restart=unless-stopped --log-opt\
+    max-size=50m -d nginx
 }
 
 function stop {
     #Stop the aplication
 
-    docker stop postgres-adk server-adk nginx-adk
+    docker stop postgres-adk server-adk reports-adk nginx-adk
 }
 
 
 function start {
     #start the aplication
 
-    docker start postgres-adk server-adk nginx-adk 
+    docker start postgres-adk server-adk reports-adk nginx-adk 
 }
 
 function restart {
     #start the aplication
 
-    docker restart postgres-adk server-adk nginx-adk 
+    docker restart postgres-adk server-adk reports-adk nginx-adk 
 }
 
 
 function delete {
     #Stop application and delete all data
     stop;
-    docker rm -f postgres-adk server-adk nginx-adk
+    docker rm -f postgres-adk server-adk reports-adk nginx-adk
 }
 
 
