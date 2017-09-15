@@ -1,6 +1,6 @@
 ## Header
-FROM python:3.5.4-alpine3.4
-MANTAINER Javier Morales
+FROM python:3.5.1-slim
+MAINTAINER Javier Morales
 
 ## Dependencies
 # install apt dependencies

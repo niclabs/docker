@@ -1,5 +1,5 @@
 docker run --name reports-adk --link postgres-adk3:postgres-adk3 --link postgres-report:postgres-report \
--v $(pwd)/reports/config.py:/adk/adkintun-reports/config.py -v $(pwd)/reports:/adk/adkintun-reports/app/static/reports \
+-v $(pwd)/reports/config.py:/adk/adkintun-reports/config.py -v $(pwd)/reports/reports:/adk/adkintun-reports/app/static/reports \
 -v $(pwd)/reports/tmp:/adk/adkintun-reports/tmp -v /etc/localtime:/etc/localtime:ro --restart=unless-stopped \
 --log-opt max-size=50m -m 2g -d reports-adk
 
