@@ -1,3 +1,9 @@
+cd adkintunmobile/server/reports
+
+docker build --no-cache reports-adk
+
+cd ..
+
 docker run --name reports-adk --link postgres-adk3:postgres-adk3 --link postgres-report:postgres-report \
 -v $(pwd)/reports/config.py:/adk/adkintun-reports/config.py -v $(pwd)/reports/reports:/adk/adkintun-reports/app/static/reports \
 -v $(pwd)/reports/tmp:/adk/adkintun-reports/tmp -v /etc/localtime:/etc/localtime:ro --restart=unless-stopped \
