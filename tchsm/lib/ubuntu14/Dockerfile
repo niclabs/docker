@@ -32,8 +32,8 @@ COPY gpg_keys/ gpg_keys/
 
 RUN gpg --import /gpg_keys/botan.gpg /gpg_keys/libsodium.gpg
 
-RUN wget https://download.libsodium.org/libsodium/releases/libsodium-1.0.9.tar.gz \
- && wget https://download.libsodium.org/libsodium/releases/libsodium-1.0.9.tar.gz.sig \
+RUN wget https://download.libsodium.org/libsodium/releases/old/libsodium-1.0.9.tar.gz \
+ && wget https://download.libsodium.org/libsodium/releases/old/libsodium-1.0.9.tar.gz.sig \
  && gpg --verify libsodium-1.0.9.tar.gz.sig libsodium-1.0.9.tar.gz \
  && tar -xzC /tmp -f libsodium-1.0.9.tar.gz && rm libsodium-1.0.9.tar.gz \
  && cd /tmp/libsodium-1.0.9/ && ./configure && make && sudo make install \
