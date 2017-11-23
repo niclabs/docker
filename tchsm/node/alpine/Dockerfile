@@ -21,7 +21,7 @@ RUN apk add cmake \
             util-linux-dev \
             zeromq-dev
 
-RUN wget https://botan.randombit.net/releases/Botan-1.11.30.tgz \
+RUN wget https://botan.randombit.net/releases/old/Botan-1.11.30.tgz \
  && tar -xzC /tmp -f Botan-1.11.30.tgz && rm Botan-1.11.30.tgz \
  && cd /tmp/Botan-1.11.30 && ./configure.py  && make && make install \
  && cd / && rm -r /tmp/Botan-1.11.30

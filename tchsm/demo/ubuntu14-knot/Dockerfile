@@ -35,7 +35,7 @@ RUN curl -LO https://ftp.gnu.org/gnu/nettle/nettle-3.2.tar.gz \
  && cd /tmp/nettle-3.2 && ./configure && make && make install \
  && cd / && rm -r /tmp/nettle-3.2
 
-RUN curl -LO ftp://ftp.gnutls.org/gcrypt/gnutls/v3.4/gnutls-3.4.9.tar.xz \
+RUN curl -LO https://www.gnupg.org/ftp/gcrypt/gnutls/v3.4/gnutls-3.4.9.tar.xz \
  && tar -xC /tmp -f gnutls-3.4.9.tar.xz && rm gnutls-3.4.9.tar.xz \
  && cd /tmp/gnutls-3.4.9 && ./configure && make && make install \
  && cd / && rm -r /tmp/gnutls-3.4.9

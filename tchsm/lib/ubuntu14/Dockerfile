@@ -45,8 +45,8 @@ RUN wget https://github.com/zeromq/zeromq4-1/releases/download/v4.1.4/zeromq-4.1
  && cd /tmp/zeromq-4.1.4 && ./configure --with-libsodium && make && sudo make install && sudo ldconfig \
  && cd / && rm -r /tmp/zeromq-4.1.4
 
-RUN wget http://botan.randombit.net/releases/Botan-1.11.29.tgz \
- && wget  http://botan.randombit.net/releases/Botan-1.11.29.tgz.asc \
+RUN wget http://botan.randombit.net/releases/old/Botan-1.11.29.tgz \
+ && wget  http://botan.randombit.net/releases/old/Botan-1.11.29.tgz.asc \
  && ls && gpg --verify Botan-1.11.29.tgz.asc Botan-1.11.29.tgz \
  && tar -xzC /tmp -f Botan-1.11.29.tgz && rm Botan-1.11.29.tgz \
  && cd /tmp/Botan-1.11.29 && ./configure.py && make && sudo make install \
