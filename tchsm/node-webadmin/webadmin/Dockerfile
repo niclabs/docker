@@ -57,12 +57,14 @@ RUN mkdir /home/nodeadmin \
  && git clone https://github.com/niclabs/tchsm-nodeadmin \
  && cd tchsm-nodeadmin \
  #TODO checkout to a release or commit.
- && git checkout f9e657b
+# && git checkout f9e657b
+ && git checkout eb7b2a37b6d0cf423aba3116c0507bd7d8b60368
 
 RUN pip install -r /home/nodeadmin/tchsm-nodeadmin/requirements.txt
 
 COPY supervisor.conf /home/nodeadmin/tchsm-nodeadmin
 COPY uwsgi.ini /home/nodeadmin/tchsm-nodeadmin
+COPY config.py /home/nodeadmin/tchsm-nodeadmin
 
 WORKDIR /home/nodeadmin/tchsm-nodeadmin
 
