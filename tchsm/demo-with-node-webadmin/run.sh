@@ -22,13 +22,12 @@ function build {
 function make-config {
 	DIR=`pwd`
 	cd ${CONF_DIR}
-	config_command="python ${CONF_DIR}/create_config.py -db \"/etc/node\" -cdb \"/etc/tchsm-cryptoki\""
+	config_command="python ${CONF_DIR}/create_config.py -db /etc/node -cdb /etc/tchsm-cryptoki"
 	for i in $(seq 1 $NODES); do
 		config_command+=" node-${i}:$((2120 + 2*i-1)):$((2120 + 2*i))"
+		sed "s/node_n/node_${i}/" config_template.py > config_${i}.py
 	done
 	`$config_command`
-#	python ${CONF_DIR}/create_config.py -db "/etc/node" -cdb "/etc/tchsm-cryptoki" \
-#		"node-1":2121:2122 "node-2":2123:2124 "node-3":2125:2126
 	cd ${DIR}
 }
 
@@ -54,19 +53,19 @@ function start {
 
     fi
 
-#    docker network create -d bridge tchsm
+    docker network create -d bridge tchsm
 
-#    for i in $(seq 1 $NODES)
-#	  do
-#			start-node $((2120 + 2*i-1)) $((2120 + 2*i)) $((8000+i)) "node-$i" "node${i}.conf"
-#	  done
+    for i in $(seq 1 $NODES)
+	  do
+			start-node $((2120 + 2*i-1)) $((2120 + 2*i)) $((8000+i)) "node-$i" "node${i}.conf" "config_${i}.py"
+	  done
 
-#    docker create --net=tchsm --name knot-tchsm-demo -p ${EXPOSE_PORT}:53 -p ${EXPOSE_PORT}:53/udp tchsm-demo-ubuntu14-knot:latest
+    docker create --net=tchsm --name knot-tchsm-demo -p ${EXPOSE_PORT}:53 -p ${EXPOSE_PORT}:53/udp tchsm-demo-ubuntu14-knot:latest
 
     # This will copy the configuration files into the container.
     # We're not using volumes because knot change file permissions.
-#    docker cp $DEMO_DIR/knot knot-tchsm-demo:/root/knot_conf/
-#    docker cp $CONF_DIR/cryptoki.conf knot-tchsm-demo:/root/knot_conf/cryptoki.conf
+    docker cp $DEMO_DIR/knot knot-tchsm-demo:/root/knot_conf/
+    docker cp $CONF_DIR/cryptoki.conf knot-tchsm-demo:/root/knot_conf/cryptoki.conf
 
 #    docker start knot-tchsm-demo
 
@@ -88,9 +87,12 @@ function start-node () {
   EXPOSE_HTTP_PORT=$3
   CONTAINER_NAME=$4
   NODEADMIN_CONF=$5
+	NODEADMIN_CONF_PY=$6
+
 
   docker run -d -v ${CONF_DIR}/${NODEADMIN_CONF}:/home/nodeadmin/tchsm-nodeadmin/conf/node.conf \
 							-v ${CONF_DIR}/start.sh:/home/nodeadmin/tchsm-nodeadmin/conf/start.sh \
+							-v ${CONF_DIR}/${NODEADMIN_CONF_PY}:/home/nodeadmin/tchsm-nodeadmin/config.py \
               --name $CONTAINER_NAME --net=tchsm -e "NODEADMIN_HTTP=1" \
               -p 0.0.0.0:${EXPOSE_HTTP_PORT}:80 -p 0.0.0.0:${EXPOSE_NODE_ROUTER_PORT}:${EXPOSE_NODE_ROUTER_PORT} \
               -p 0.0.0.0:${EXPOSE_NODE_SUB_PORT}:${EXPOSE_NODE_SUB_PORT} tchsm-nodeadmin
@@ -104,7 +106,7 @@ function start-server {
 case "$1" in
     start)
         start
-	;;
+				;;
     start-server)
         start-server
         ;;
