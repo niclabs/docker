@@ -81,6 +81,10 @@ function stop {
     docker network rm tchsm
 }
 
+function stop-server {
+		docker rm -f knot-tchsm-demo
+}
+
 function start-node () {
   EXPOSE_NODE_ROUTER_PORT=$1
   EXPOSE_NODE_SUB_PORT=$2
@@ -112,6 +116,9 @@ case "$1" in
         ;;
     stop)
         stop
+        ;;
+    stop-server)
+        stop-server
         ;;
     build)
         build
