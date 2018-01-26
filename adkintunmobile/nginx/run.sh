@@ -38,7 +38,8 @@ function start {
 
 function restart {
     #start the aplication
-    docker restart $NGINX_NAME
+    delete
+		run
 }
 
 function delete {
