@@ -17,7 +17,7 @@ function usage {
 SERVER_NAME="server-adk"
 SERVER_PORT=80
 
-REPORTS_SERVER_NAME="postgres-adk"
+REPORTS_SERVER_NAME="adk-report-backend"
 REPORTS_SERVER_PORT=8080
 
 NGINX_NAME="nginx-adk"
@@ -51,7 +51,7 @@ function delete {
 function run {
 	docker run --name $NGINX_NAME -v $(pwd)/nginx.conf:/etc/nginx/conf.d/adk.conf:ro \
 		--link $REPORTS_SERVER_NAME:server-report --link $SERVER_NAME:server-adk  \
-		-p $SERVER_PORT:$SERVER_PORT $REPORTS_SERVER_PORT:$REPORTS_SERVER_PORT \
+		-p $SERVER_PORT:$SERVER_PORT -p $REPORTS_SERVER_PORT:$REPORTS_SERVER_PORT \
 		-v /etc/localtime:/etc/localtime:ro  --restart=unless-stopped --log-opt max-size=50m -d nginx
 }
 
