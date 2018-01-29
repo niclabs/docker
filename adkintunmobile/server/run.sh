@@ -21,7 +21,7 @@ function usage {
 }
 
 SERVER_NAME="server-adk"
-DATABASE_NAME="postgres-adk"
+DATABASE_NAME="adk-report-main"
 
 function usage_run {
     echo "Usage: $0 run [-u <string : user name> ] [-p <string : password>] [-d <string : database name>]";
@@ -54,15 +54,16 @@ function build {
     docker build --tag populate-adk .
     cd "$DIR/server"
     docker build --tag server-adk .
+    cd $DIR
 }
 
 
 function runserver {
     # Run server docker
-    mkdir -p $(pwd)/../report-generation/reports
+    mkdir -p $(pwd)/../reports-generation/reports
     mkdir -p $(pwd)/tmp
-    docker run --name $SERVER_NAME --link $DATABASE_NAME:postgres -v $(pwd)/config.py:/adk/AdkintunMobile-Server/config.py \
-    -v $(pwd)/../report-generation/reports:/adk/AdkintunMobile-Server/app/static/reports -v $(pwd)/tmp:/adk/AdkintunMobile-Server/tmp \
+    docker run --name $SERVER_NAME --link $DATABASE_NAME:postgres-adk -v $(pwd)/config.py:/adk/AdkintunMobile-Server/config.py \
+    -v $(pwd)/../reports-generation/reports:/adk/AdkintunMobile-Server/app/static/reports -v $(pwd)/tmp:/adk/AdkintunMobile-Server/tmp \
     -v /etc/localtime:/etc/localtime:ro --restart=unless-stopped --log-opt max-size=50m -d server-adk
 }
 
@@ -91,7 +92,7 @@ function delete {
 function upgrade {
     delete
     build
-    run
+    runserver
 }
 
 function login (){

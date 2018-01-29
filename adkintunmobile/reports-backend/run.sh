@@ -20,7 +20,11 @@ function usage {
     upgrade   Rebuild and restart docker container for the  server
     ";
     exit 1;
-    }
+}
+
+SERVER_NAME="adk-report-backend"
+DATABASE_NAME="postgres-report"
+
 
 function usage_backup {
     echo "Usage: $0 backup {-u <string: user name>} {-p <string: password>} {-f <string: filename>} [-d (data-only)]";
@@ -65,22 +69,22 @@ function build { # build the docker images
 }
 
 function stop { # Stop containers
-    docker stop server-report
+    docker stop $SERVER_NAME
 }
 
 function start { # Start containers
-    docker start server-report
+    docker start $SERVER_NAME
 }
 
 function delete () { # Delete containers
     stop
-    docker rm server-report
+    docker rm $SERVER_NAME
 }
 
 function runserver () { # Create and run the containers
 
   mkdir -p $(pwd)/tmp
-  docker run --name server-report --link postgres-report:postgres \
+  docker run --name $SERVER_NAME --link $DATABASE_NAME:postgres \
   -v $(pwd)/config.py:/adk/adkintunmobile-frontend/config.py \
   -v $(pwd)/tmp:/adk/adkintunmobile-frontend/tmp -u $(id -u):$(id -u) \
   -v /etc/localtime:/etc/localtime:ro --restart=unless-stopped \
@@ -91,7 +95,7 @@ function runserver () { # Create and run the containers
 function import () {
   month="$1"
   year="$2"
-  docker run --rm --name import-report --link postgres-report:postgres \
+  docker run --rm --name import-report --link $DATABASE_NAME:postgres \
   -v $(pwd)/tmp:/adk/adkintunmobile-frontend/tmp -v /etc/localtime:/etc/localtime:ro \
   -v $(pwd)/config.py:/adk/adkintunmobile-frontend/config.py \
   import-report -y $year -m $month
@@ -112,10 +116,10 @@ function rundb () {
 
   docker create -v /data-reports --name data-reports postgres /bin/true
 
-  docker run --name postgres-report -e POSTGRES_PASSWORD=$password -e POSTGRES_USER=$user \
+  docker run --name $DATABASE_NAME -e POSTGRES_PASSWORD=$password -e POSTGRES_USER=$user \
   -e POSTGRES_DB=visualization --volumes-from data-reports \
   -v /etc/localtime:/etc/localtime:ro --log-opt max-size=50m -d postgres
-  #  until curl http://$(docker inspect --format='{{.NetworkSettings.IPAddress}}' postgres-report):5432/ | grep '52'
+  #  until curl http://$(docker inspect --format='{{.NetworkSettings.IPAddress}}' $DATABASE_NAME):5432/ | grep '52'
   #  do
         echo "waiting for postgres container..."
         sleep 30
@@ -125,7 +129,7 @@ function rundb () {
 
 function populate () { # Populate the database with initial data
   # Run populate docker
-  docker run --rm --link postgres-report:postgres \
+  docker run --rm --link $DATABASE_NAME:postgres \
   -v $(pwd)/config.py:/adk/adkintunmobile-frontend/config.py populate-report
 }
 
@@ -142,7 +146,7 @@ function backup () {
     message="Backing up database, data only"
   fi
   echo $message
-  docker run --rm --link postgres-report:pg \
+  docker run --rm --link $DATABASE_NAME:pg \
   -v /etc/localtime:/etc/localtime:ro postgres /bin/bash -c  "pg_dump $backup_data --dbname \
   postgresql://$user:$password@pg/visualization | gzip -c" > $(pwd)/backups/$outfile
 }
@@ -156,7 +160,7 @@ function restore () {
   if ! [ -z $delete ]
   then
     echo "deleting previous data"
-    docker run --rm --link postgres-report:pg -v /etc/localtime:/etc/localtime:ro \
+    docker run --rm --link $DATABASE_NAME:pg -v /etc/localtime:/etc/localtime:ro \
     postgres /bin/bash -c "echo \"
         DROP SCHEMA public CASCADE;
         CREATE SCHEMA public;
@@ -166,7 +170,7 @@ function restore () {
         postgresql://$user:$password@pg/visualization"
 
   fi
-  docker run --rm --link postgres-report:pg -v /etc/localtime:/etc/localtime:ro \
+  docker run --rm --link $DATABASE_NAME:pg -v /etc/localtime:/etc/localtime:ro \
   -v $(pwd)/$infile:/backups/$infile postgres /bin/bash -c \
   "gunzip -c /backups/$infile | psql --dbname postgresql://$user:$password@pg/visualization"
 }
@@ -174,7 +178,7 @@ function restore () {
 function login (){
   user="$1"
   password="$2"
-  docker run --rm -it --link postgres-report:pg -v /etc/localtime:/etc/localtime:ro \
+  docker run --rm -it --link $DATABASE_NAME:pg -v /etc/localtime:/etc/localtime:ro \
   postgres psql --dbname postgresql://$user:$password@pg/visualization
 }
 ### ------------------ Commands and parameter handling ------------------###
