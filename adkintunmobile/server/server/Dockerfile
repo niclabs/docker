@@ -17,7 +17,7 @@ RUN mkdir /adk && \
 	cd /adk && \
 	git clone https://github.com/niclabs/AdkintunMobile-Server.git && \
 	cd AdkintunMobile-Server && \
-	git checkout 3c5e7523ac2d2c62dee784ba7c0dcee1f0fa5c27 
+	git checkout dbe99cacf992bb98450ce15abd6d60bb0a1408e1
 
 
 # install pip dependencies
@@ -36,8 +36,7 @@ RUN apt-get purge -y \
 # cleaning up list of available packages
 RUN rm -rf /var/lib/apt/lists/*
 
-
 ## Run command
 #run uwsgi
 CMD cd /adk/AdkintunMobile-Server && \
-	uwsgi --socket 0.0.0.0:8000  --processes $(nproc) -w app:application --mule --mule	
+	uwsgi --socket 0.0.0.0:8000  --processes $(nproc) -w app:application --mule 
