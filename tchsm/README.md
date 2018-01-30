@@ -18,5 +18,11 @@ Dockerfiles of the library, vanilla OS with the library installed.
 ### node
 Dockerfiles of the node, vanilla OS with the nodes installed.
 
+### node-webadmin
+Webadmin application to manage a single node
+
 ### demo
-Demonstration of the software running with some DNS servers, it includes scripts to run the demo easily.
+Demonstration of the software running simple nodes with some DNS servers, it includes scripts to run the demo easily.
+
+### demo-with-node-webadmin
+Demonstration of the software running webadmin nodes with some DNS servers, it includes scripts to run the demo easily.
