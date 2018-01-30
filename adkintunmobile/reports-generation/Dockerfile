@@ -1,7 +1,6 @@
 ## Header
 FROM python:3.5.1-slim
-MAINTAINER Boris Romero <boris@niclabs.cl>
-
+MAINTAINER Felipe Quintanilla <felipe@niclabs.cl>
 
 ## Dependencies
 # install apt dependencies
@@ -15,15 +14,12 @@ RUN apt-get update && \
 # clone project
 RUN mkdir /adk && \
 	cd /adk && \
-	git clone https://github.com/niclabs/AdkintunMobile-Server.git && \
-	cd AdkintunMobile-Server && \
-	git checkout dbe99cacf992bb98450ce15abd6d60bb0a1408e1
-
+	git clone https://github.com/niclabs/adkintun-reports && \
+	cd adkintun-reports
 
 # install pip dependencies
-RUN cd /adk/AdkintunMobile-Server && \
+RUN cd /adk/adkintun-reports && \
 	pip install -r requirements.txt
-
 
 ## Clean Up
 # cleaning up apt dependencies
@@ -38,5 +34,10 @@ RUN rm -rf /var/lib/apt/lists/*
 
 ## Run command
 #run uwsgi
-CMD cd /adk/AdkintunMobile-Server && \
-	uwsgi --socket 0.0.0.0:8000  --processes $(nproc) -w app:application --mule 
+
+WORKDIR /adk/adkintun-reports
+
+#ENTRYPOINT ["python", "/adk/adkintun-reports/manage.py"]
+
+CMD cd /adk/adkintun-reports && \
+uwsgi --socket 0.0.0.0:8000 --processes $(nproc) -w app:application --mule

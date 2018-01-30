@@ -1,0 +1,25 @@
+{
+  "name": "adkintun-login-websocket",
+  "version": "1.0.0",
+  "description": "Micro-service to manage login to the AdkintunMobile website using websockets",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/niclabs/adkintun-login-websocket.git"
+  },
+  "author": "niclabs",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/niclabs/adkintun-login-websocket/issues"
+  },
+  "homepage": "https://github.com/niclabs/adkintun-login-websocket#readme",
+  "dependencies": {
+    "uuid": "^3.0.1",
+    "ws": "^3.0.0",
+    "winston": "^2.3.1",
+    "dateformat": "^2.0.0"
+  }
+}

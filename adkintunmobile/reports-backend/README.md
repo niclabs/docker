@@ -1,11 +1,12 @@
 # adkintunmobile dockerfiles
 
-## Adkintun Mobile Server
-Adkintun Mobile is an android application project for monitoring QoS on mobile network. For more information, visit the repository of the project [here](https://www.github.com/niclabs/adkintunmobile), or the repository of the server [here](https://www.github.com/niclabs/adkintunmobile-server)
+## Adkintun Mobile Reports Backend
+Adkintun Mobile is an android application project for monitoring QoS on mobile network. For more information, visit the repository of the project [here](https://www.github.com/niclabs/adkintunmobile).
+This module handles the backend for the adkintunmobile website.
 
 ## Deploy Instructions
 
-To deploy the adkintunmobile-server project:
+To deploy the project:
 1. Build the docker images:
 ```
 $ ./run.sh build
@@ -53,15 +54,17 @@ Usage: ./run.sh COMMAND
     Program to manage the server-report containers
 
     Commands:
-    help      Display this message
     backup    Backup database to file
     build     Build docker images
     delete    Delete docker container for the server
+    help      Display this message
     login     Log into the database
     populate  Populate database with initial data
+    restore   Restore database with data from file
     rundb     Create and start docker container for database
     runserver Run docker container for the server
     start     Start docker container for the server
     stop      Stop docker container for the server
     upgrade   Rebuild and restart docker container for the  server
+
 ```
