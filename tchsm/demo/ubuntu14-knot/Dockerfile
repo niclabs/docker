@@ -25,10 +25,10 @@ RUN curl -LO ftp://sourceware.org/pub/libffi/libffi-3.2.1.tar.gz \
 
 ENV PKG_CONFIG_PATH /usr/local/lib64/pkgconfig/:/usr/local/lib/pkgconfig
 
-RUN curl -LO https://p11-glue.freedesktop.org/releases/p11-kit-0.23.2.tar.gz \
- && tar -xzC /tmp -f p11-kit-0.23.2.tar.gz && rm p11-kit-0.23.2.tar.gz \
- && cd /tmp/p11-kit-0.23.2 && ./configure && make && make install \
- && cd / && rm -r /tmp/p11-kit-0.23.2
+RUN curl -LO https://github.com/p11-glue/p11-kit/releases/download/0.23.14/p11-kit-0.23.14.tar.gz \
+ && tar -xzC /tmp -f p11-kit-0.23.14.tar.gz && rm p11-kit-0.23.14.tar.gz \
+ && cd /tmp/p11-kit-0.23.14 && ./configure && make && make install \
+ && cd / && rm -r /tmp/p11-kit-0.23.14
 
 RUN curl -LO https://ftp.gnu.org/gnu/nettle/nettle-3.2.tar.gz \
  && tar -xzC /tmp -f nettle-3.2.tar.gz && rm nettle-3.2.tar.gz \
@@ -40,7 +40,7 @@ RUN curl -LO https://www.gnupg.org/ftp/gcrypt/gnutls/v3.4/gnutls-3.4.9.tar.xz \
  && cd /tmp/gnutls-3.4.9 && ./configure && make && make install \
  && cd / && rm -r /tmp/gnutls-3.4.9
 
-RUN curl -O http://www.lttng.org/files/urcu/userspace-rcu-0.9.2.tar.bz2 \
+RUN curl -O https://lttng.org/files/urcu/userspace-rcu-0.9.2.tar.bz2 \
  && tar -xjC /tmp -f userspace-rcu-0.9.2.tar.bz2 \
  && cd /tmp/userspace-rcu-0.9.2 && ./configure && make && make install \
  && cd / && rm -r /tmp/userspace-rcu-0.9.2
