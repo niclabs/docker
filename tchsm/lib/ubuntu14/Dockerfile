@@ -32,12 +32,12 @@ COPY gpg_keys/ gpg_keys/
 
 RUN gpg --import /gpg_keys/botan.gpg /gpg_keys/libsodium.gpg
 
-RUN wget https://download.libsodium.org/libsodium/releases/old/libsodium-1.0.9.tar.gz \
- && wget https://download.libsodium.org/libsodium/releases/old/libsodium-1.0.9.tar.gz.sig \
- && gpg --verify libsodium-1.0.9.tar.gz.sig libsodium-1.0.9.tar.gz \
- && tar -xzC /tmp -f libsodium-1.0.9.tar.gz && rm libsodium-1.0.9.tar.gz \
- && cd /tmp/libsodium-1.0.9/ && ./configure && make && sudo make install \
- && cd / && rm -r /tmp/libsodium-1.0.9
+RUN wget https://download.libsodium.org/libsodium/releases/old/libsodium-1.0.13.tar.gz \
+ && wget https://download.libsodium.org/libsodium/releases/old/libsodium-1.0.13.tar.gz.sig \
+ && gpg --verify libsodium-1.0.13.tar.gz.sig libsodium-1.0.13.tar.gz \
+ && tar -xzC /tmp -f libsodium-1.0.13.tar.gz && rm libsodium-1.0.13.tar.gz \
+ && cd /tmp/libsodium-1.0.13/ && ./configure && make && sudo make install \
+ && cd / && rm -r /tmp/libsodium-1.0.13
 
 RUN wget https://github.com/zeromq/zeromq4-1/releases/download/v4.1.4/zeromq-4.1.4.tar.gz \
  && echo 'b632a4b6f8a14390dc17824e37ff7b10831ce2b4  zeromq-4.1.4.tar.gz' | sha1sum -c \
