@@ -12,9 +12,9 @@ function build {
 
     set -e
 
-    docker build -t tchsm-node-alpine ${DEMO_DIRECTORY}/../../node/alpine
-    docker build -t tchsm-lib-ubuntu14 ${DEMO_DIRECTORY}/../../lib/ubuntu14
-    docker build -t tchsm-demo-ubuntu14-knot ${DEMO_DIRECTORY}/.
+    docker build -t tchsm-node-alpine ${DEMO_DIRECTORY}/../node/alpine
+    docker build -t tchsm-lib-ubuntulatest ${DEMO_DIRECTORY}/../lib/ubuntulatest
+    docker build -t tchsm-demo-ubuntulatest-knot ${DEMO_DIRECTORY}/.
 }
 
 function start {
