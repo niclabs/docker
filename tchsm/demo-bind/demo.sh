@@ -30,8 +30,13 @@ function start {
     docker create --net=tchsm --name bind-tchsm-demo -p ${EXPOSE_PORT}:53 -p ${EXPOSE_PORT}:53/udp tchsm-demo-bind
 
     # This will copy the configuration files into the container.
-    # We're not using volumes because knot change file permissions.
-    # docker cp $DEMO_DIRECTORY/conf_files/knot bind-tchsm-demo:/root/knot_conf/
+    # We're not using volumes because bind change file permissions.
+
+    docker cp $DEMO_DIRECTORY/conf_files/bind/named.conf.local bind-tchsm-demo:/etc/bind/named.conf.local
+    docker cp $DEMO_DIRECTORY/conf_files/bind/named.conf.log bind-tchsm-demo:/etc/bind/named.conf.log
+    docker cp $DEMO_DIRECTORY/conf_files/bind/zones/* bind-tchsm-demo:/etc/bind/zones/
+
+    docker exec bind-tchsm-demo /etc/init.d/bind9 restart
 
     docker start bind-tchsm-demo
 }

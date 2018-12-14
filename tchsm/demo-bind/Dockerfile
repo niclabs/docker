@@ -49,11 +49,8 @@ RUN curl -O https://lttng.org/files/urcu/userspace-rcu-0.9.2.tar.bz2 \
  && cd / && rm -r /tmp/userspace-rcu-0.9.2
 
 RUN mkdir /etc/bind/zones
-RUN rm /etc/bind/named.conf.local
 
-COPY conf_files/bind/named.conf.local /etc/bind/named.conf.local
-COPY conf_files/bind/named.conf.log /etc/bind/named.conf.log
-COPY conf_files/bind/zones/* /etc/bind/zones/
+RUN rm /etc/bind/named.conf.local
 
 RUN apt-get purge -y autotools-dev \
                      build-essential \
@@ -65,7 +62,5 @@ RUN apt-get purge -y autotools-dev \
                      libgmp-dev \
                      libjansson-dev \
                      pkg-config
-
-RUN /etc/init.d/bind9 restart
 
 CMD ["/usr/sbin/named", "-g"]
