@@ -1,4 +1,4 @@
-FROM ubuntu:18.04
+FROM ubuntu:16.04
 
 RUN apt-get update -qq
 
@@ -22,8 +22,7 @@ RUN apt-get install -y \
         libsqlite3-dev \
         libunbound-dev \
         liburcu-dev \
-        uuid-dev \
-        gpg
+        uuid-dev
 
 RUN mkdir gpg_keys
 
