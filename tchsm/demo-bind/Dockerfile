@@ -15,6 +15,10 @@ RUN apt-get install -y autotools-dev \
                        libjansson-dev \
                        pkg-config \
                        bind9
+<<<<<<< HEAD
+=======
+
+>>>>>>> 9d9d87923528ca140cdded28f710221ab46a951b
 
 RUN curl -LO http://ftp.gnu.org/gnu/libtasn1/libtasn1-4.7.tar.gz \
  && tar -xzC /tmp -f libtasn1-4.7.tar.gz && rm libtasn1-4.7.tar.gz \
