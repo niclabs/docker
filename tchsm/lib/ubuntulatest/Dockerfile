@@ -22,7 +22,8 @@ RUN apt-get install -y \
         libsqlite3-dev \
         libunbound-dev \
         liburcu-dev \
-        uuid-dev
+        uuid-dev \
+        gpg
 
 RUN mkdir gpg_keys
 
@@ -34,20 +35,20 @@ RUN wget https://download.libsodium.org/libsodium/releases/old/libsodium-1.0.13.
  && wget https://download.libsodium.org/libsodium/releases/old/libsodium-1.0.13.tar.gz.sig \
  && gpg --verify libsodium-1.0.13.tar.gz.sig libsodium-1.0.13.tar.gz \
  && tar -xzC /tmp -f libsodium-1.0.13.tar.gz && rm libsodium-1.0.13.tar.gz \
- && cd /tmp/libsodium-1.0.13/ && ./configure && make && sudo make install \
+ && cd /tmp/libsodium-1.0.13/ && ./configure && make && make install \
  && cd / && rm -r /tmp/libsodium-1.0.13
 
 RUN wget https://github.com/zeromq/zeromq4-1/releases/download/v4.1.4/zeromq-4.1.4.tar.gz \
  && echo 'b632a4b6f8a14390dc17824e37ff7b10831ce2b4  zeromq-4.1.4.tar.gz' | sha1sum -c \
  && tar -xzC /tmp -f zeromq-4.1.4.tar.gz && rm zeromq-4.1.4.tar.gz \
- && cd /tmp/zeromq-4.1.4 && ./configure --with-libsodium && make && sudo make install && sudo ldconfig \
+ && cd /tmp/zeromq-4.1.4 && ./configure --with-libsodium && make && make install && ldconfig \
  && cd / && rm -r /tmp/zeromq-4.1.4
 
 RUN wget http://botan.randombit.net/releases/old/Botan-1.11.29.tgz \
  && wget  http://botan.randombit.net/releases/old/Botan-1.11.29.tgz.asc \
  && ls && gpg --verify Botan-1.11.29.tgz.asc Botan-1.11.29.tgz \
  && tar -xzC /tmp -f Botan-1.11.29.tgz && rm Botan-1.11.29.tgz \
- && cd /tmp/Botan-1.11.29 && ./configure.py && make && sudo make install \
+ && cd /tmp/Botan-1.11.29 && ./configure.py && make && make install \
  && cd / && rm -r /tmp/Botan-1.11.29
 
 RUN wget https://github.com/niclabs/tchsm-libtc/archive/v0.2.tar.gz \
@@ -66,7 +67,7 @@ RUN wget http://github.com/niclabs/tchsm-libdtc/archive/v0.1.tar.gz \
  && make install \
  && cd / && rm -r /tmp/tchsm-libdtc-0.1
 
-RUN sudo apt-get purge -y \
+RUN apt-get purge -y \
         build-essential \
         cmake \
         gcc \
@@ -76,7 +77,7 @@ RUN sudo apt-get purge -y \
         unzip \
         wget
 
-RUN sudo apt-get purge -y \
+RUN apt-get purge -y \
         libconfig-dev \
         libedit-dev \
         libgmp-dev \
