@@ -13,8 +13,8 @@ function build {
     set -e
 
     docker build -t tchsm-node-alpine ${DEMO_DIRECTORY}/../node/alpine
-    docker build -t tchsm-lib-ubuntulatest ${DEMO_DIRECTORY}/../lib/ubuntulatest
-    docker build -t tchsm-demo-ubuntulatest-knot ${DEMO_DIRECTORY}/.
+    docker build -t tchsm-lib-ubuntu16 ${DEMO_DIRECTORY}/../lib/ubuntu16
+    docker build -t tchsm-demo-bind ${DEMO_DIRECTORY}/.
 }
 
 function start {
@@ -27,13 +27,13 @@ function start {
         docker -D run --net=tchsm -d -v $DEMO_DIRECTORY/conf_files/node$i.conf:/etc/node$i.conf --name node-$i tchsm-node-alpine -c /etc/node$i.conf
     done
 
-    docker create --net=tchsm --name knot-tchsm-demo -p ${EXPOSE_PORT}:53 -p ${EXPOSE_PORT}:53/udp tchsm-demo-ubuntu14-knot
+    docker create --net=tchsm --name bind-tchsm-demo -p ${EXPOSE_PORT}:53 -p ${EXPOSE_PORT}:53/udp tchsm-demo-bind
 
     # This will copy the configuration files into the container.
     # We're not using volumes because knot change file permissions.
-    docker cp $DEMO_DIRECTORY/conf_files/knot knot-tchsm-demo:/root/knot_conf/
+    # docker cp $DEMO_DIRECTORY/conf_files/knot bind-tchsm-demo:/root/knot_conf/
 
-    docker start knot-tchsm-demo
+    docker start bind-tchsm-demo
 }
 
 function stop {
@@ -43,7 +43,7 @@ function stop {
         docker rm -f node-$i
     done
 
-    docker rm -f knot-tchsm-demo
+    docker rm -f bind-tchsm-demo
 
     docker network rm tchsm
 }
