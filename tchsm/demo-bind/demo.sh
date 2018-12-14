@@ -31,7 +31,7 @@ function start {
 
     # This will copy the configuration files into the container.
     # We're not using volumes because knot change file permissions.
-    # docker cp $DEMO_DIRECTORY/conf_files/knot bind-tchsm-demo-tchsm-demo:/root/knot_conf/
+    # docker cp $DEMO_DIRECTORY/conf_files/knot bind-tchsm-demo:/root/knot_conf/
 
     docker start bind-tchsm-demo
 }
@@ -43,7 +43,7 @@ function stop {
         docker rm -f node-$i
     done
 
-    docker rm -f knot-tchsm-demo
+    docker rm -f bind-tchsm-demo
 
     docker network rm tchsm
 }

@@ -2,6 +2,8 @@ FROM tchsm-lib-ubuntu16:latest
 
 MAINTAINER Francisco Montoto <montoto@niclabs.cl>
 
+RUN apt-get update -qq
+
 RUN apt-get install -y autotools-dev \
                        build-essential \
                        curl \
@@ -13,7 +15,6 @@ RUN apt-get install -y autotools-dev \
                        libjansson-dev \
                        pkg-config \
                        bind9
-
 
 RUN curl -LO http://ftp.gnu.org/gnu/libtasn1/libtasn1-4.7.tar.gz \
  && tar -xzC /tmp -f libtasn1-4.7.tar.gz && rm libtasn1-4.7.tar.gz \
@@ -47,6 +48,12 @@ RUN curl -O https://lttng.org/files/urcu/userspace-rcu-0.9.2.tar.bz2 \
  && cd /tmp/userspace-rcu-0.9.2 && ./configure && make && make install \
  && cd / && rm -r /tmp/userspace-rcu-0.9.2
 
+RUN mkdir /etc/bind/zones
+RUN rm /etc/bind/named.conf.local
+
+COPY conf_files/bind/named.conf.local /etc/bind/named.conf.local
+COPY conf_files/bind/named.conf.log /etc/bind/named.conf.log
+COPY conf_files/bind/zones/* /etc/bind/zones/
 
 RUN apt-get purge -y autotools-dev \
                      build-essential \
@@ -59,9 +66,6 @@ RUN apt-get purge -y autotools-dev \
                      libjansson-dev \
                      pkg-config
 
-RUN mkdir -p /etc/bind/zones
-COPY conf_files/bind/named.conf.log /etc/bind/named.conf.log
+RUN /etc/init.d/bind9 restart
 
-CMD ["/root/knot_conf/run.sh"]
-
-
+CMD ["/usr/sbin/named", "-g"]
