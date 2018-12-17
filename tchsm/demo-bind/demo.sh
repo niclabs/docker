@@ -36,9 +36,10 @@ function start {
     docker cp $DEMO_DIRECTORY/conf_files/bind/named.conf.log bind-tchsm-demo:/etc/bind/named.conf.log
     docker cp $DEMO_DIRECTORY/conf_files/bind/zones/* bind-tchsm-demo:/etc/bind/zones/
 
-    docker exec bind-tchsm-demo /etc/init.d/bind9 restart
-
     docker start bind-tchsm-demo
+
+    docker exec bind-tchsm-demo chown -R bind:bind /etc/bind/* /var/logs/bind/*
+    docker exec bind-tchsm-demo /etc/init.d/bind9 restart
 }
 
 function stop {
