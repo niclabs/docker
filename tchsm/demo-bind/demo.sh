@@ -4,6 +4,8 @@ usage() { echo "Usage: $0 build | start | stop"; exit 1; }
 
 NODES=3
 EXPOSE_PORT=54
+WEBMIN_PORT=10001
+WEBMIN_PASSWORD=password
 
 DEMO_DIRECTORY_=`dirname $0`
 DEMO_DIRECTORY=`readlink -e $DEMO_DIRECTORY_`
@@ -27,7 +29,10 @@ function start {
         docker -D run --net=tchsm -d -v $DEMO_DIRECTORY/conf_files/node$i.conf:/etc/node$i.conf --name node-$i tchsm-node-alpine -c /etc/node$i.conf
     done
 
-    docker -D run --net=tchsm -d -v $DEMO_DIRECTORY/conf_files/bind/etc:/etc/bind --name bind-tchsm-demo tchsm-demo-bind
+    docker -D run --net=tchsm -d -p ${EXPOSE_PORT}:53 -p ${EXPOSE_PORT}:53/udp -p ${WEBMIN_PORT}:10000 -v $DEMO_DIRECTORY/conf_files/bind/etc:/etc/bind --name bind-tchsm-demo tchsm-demo-bind
+
+    docker exec bind-tchsm-demo /bin/bash -c "echo 'root:$WEBMIN_PASSWORD' | chpasswd"
+    docker exec bind-tchsm-demo /etc/init.d/webmin start
 }
 
 function stop {

@@ -2,7 +2,16 @@ FROM tchsm-lib-ubuntu16:latest
 
 MAINTAINER Francisco Montoto <montoto@niclabs.cl>
 
+RUN apt-key adv --fetch-keys http://www.webmin.com/jcameron-key.asc \
+ && echo "deb http://download.webmin.com/download/repository sarge contrib" >> /etc/apt/sources.list
+
 RUN apt-get update -qq
+
+# fix dependancy problem with webmin.
+# ref: https://serverfault.com/questions/845192/dependency-problems-while-installing-webmin
+RUN apt-get purge -y apt-show-versions \
+ && apt-get -y -o Acquire::GzipIndexes=false update \
+ && apt-get install -y apt-show-versions
 
 RUN apt-get install -y autotools-dev \
                        build-essential \
@@ -14,7 +23,9 @@ RUN apt-get install -y autotools-dev \
                        libgmp-dev \
                        libjansson-dev \
                        pkg-config \
-                       bind9
+                       bind9 \
+                       dnsutils \
+                       webmin
 
 RUN curl -LO http://ftp.gnu.org/gnu/libtasn1/libtasn1-4.7.tar.gz \
  && tar -xzC /tmp -f libtasn1-4.7.tar.gz && rm libtasn1-4.7.tar.gz \
@@ -47,10 +58,6 @@ RUN curl -O https://lttng.org/files/urcu/userspace-rcu-0.9.2.tar.bz2 \
  && tar -xjC /tmp -f userspace-rcu-0.9.2.tar.bz2 \
  && cd /tmp/userspace-rcu-0.9.2 && ./configure && make && make install \
  && cd / && rm -r /tmp/userspace-rcu-0.9.2
-
-RUN mkdir /etc/bind/zones
-
-RUN rm /etc/bind/named.conf.local
 
 RUN apt-get purge -y autotools-dev \
                      build-essential \
