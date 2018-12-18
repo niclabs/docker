@@ -27,19 +27,7 @@ function start {
         docker -D run --net=tchsm -d -v $DEMO_DIRECTORY/conf_files/node$i.conf:/etc/node$i.conf --name node-$i tchsm-node-alpine -c /etc/node$i.conf
     done
 
-    docker create --net=tchsm --name bind-tchsm-demo -p ${EXPOSE_PORT}:53 -p ${EXPOSE_PORT}:53/udp tchsm-demo-bind
-
-    # This will copy the configuration files into the container.
-    # We're not using volumes because bind change file permissions.
-
-    docker cp $DEMO_DIRECTORY/conf_files/bind/named.conf.local bind-tchsm-demo:/etc/bind/named.conf.local
-    docker cp $DEMO_DIRECTORY/conf_files/bind/named.conf.log bind-tchsm-demo:/etc/bind/named.conf.log
-    docker cp $DEMO_DIRECTORY/conf_files/bind/zones/* bind-tchsm-demo:/etc/bind/zones/
-
-    docker start bind-tchsm-demo
-
-    # docker exec bind-tchsm-demo chown -R bind:bind /etc/bind/*
-    # docker exec bind-tchsm-demo /etc/init.d/bind9 restart
+    docker -D run --net=tchsm -d -v $DEMO_DIRECTORY/conf_files/bind/etc:/etc/bind --name bind-tchsm-demo tchsm-demo-bind
 }
 
 function stop {
