@@ -63,4 +63,6 @@ RUN apt-get purge -y autotools-dev \
                      libjansson-dev \
                      pkg-config
 
-CMD ["/usr/sbin/named", "-g"]
+ENTRYPOINT ["/usr/sbin/named"]
+
+CMD ["-g", "-u", "bind"]

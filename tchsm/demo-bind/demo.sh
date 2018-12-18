@@ -38,8 +38,8 @@ function start {
 
     docker start bind-tchsm-demo
 
-    docker exec bind-tchsm-demo chown -R bind:bind /etc/bind/* /var/logs/bind/*
-    docker exec bind-tchsm-demo /etc/init.d/bind9 restart
+    # docker exec bind-tchsm-demo chown -R bind:bind /etc/bind/*
+    # docker exec bind-tchsm-demo /etc/init.d/bind9 restart
 }
 
 function stop {
