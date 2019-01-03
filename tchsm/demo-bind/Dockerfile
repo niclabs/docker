@@ -1,75 +1,53 @@
-FROM tchsm-lib-ubuntu16:latest
+FROM tchsm-lib-centos7:latest
 
-MAINTAINER Francisco Montoto <montoto@niclabs.cl>
+RUN yum install -y make perl gcc
 
-RUN apt-key adv --fetch-keys http://www.webmin.com/jcameron-key.asc \
- && echo "deb http://download.webmin.com/download/repository sarge contrib" >> /etc/apt/sources.list
+RUN yum install -y \
+            wget \
+            perl-Net-SSLeay \
+            openssl \
+            perl-IO-Tty \
+            perl-Encode-Detect
 
-RUN apt-get update -qq
+RUN yum install -y install geoip-devel krb5-devel libcap-devel
 
-# fix dependancy problem with webmin.
-# ref: https://serverfault.com/questions/845192/dependency-problems-while-installing-webmin
-RUN apt-get purge -y apt-show-versions \
- && apt-get -y -o Acquire::GzipIndexes=false update \
- && apt-get install -y apt-show-versions
+RUN yum install -y openssl-devel libxml2-devel sqlite-devel
 
-RUN apt-get install -y autotools-dev \
-                       build-essential \
-                       curl \
-                       gcc \
-                       g++ \
-                       libedit-dev \
-                       libidn11-dev \
-                       libgmp-dev \
-                       libjansson-dev \
-                       pkg-config \
-                       bind9 \
-                       dnsutils \
-                       webmin
+RUN wget http://prdownloads.sourceforge.net/webadmin/webmin-1.900-1.noarch.rpm \
+ && rpm -U webmin-1.900-1.noarch.rpm && rm -f webmin-1.900-1.noarch.rpm
 
-RUN curl -LO http://ftp.gnu.org/gnu/libtasn1/libtasn1-4.7.tar.gz \
- && tar -xzC /tmp -f libtasn1-4.7.tar.gz && rm libtasn1-4.7.tar.gz \
- && cd /tmp/libtasn1-4.7 && ./configure && make && make install \
- && cd / && rm -r /tmp/libtasn1-4.7
+ENV BIND_VERSION=9.11.5-P1 \
+  OPENDNSSEC_VERSION=1.4.14 \
+  LDNS_VERSION=1.6.17
 
-RUN curl -LO ftp://sourceware.org/pub/libffi/libffi-3.2.1.tar.gz \
- && tar -xzC /tmp -f libffi-3.2.1.tar.gz && rm libffi-3.2.1.tar.gz \
- && cd /tmp/libffi-3.2.1 && ./configure && make && make install \
- && cd / && rm -r /tmp/libffi-3.2.1
+RUN wget ftp://ftp.isc.org/isc/bind9/${BIND_VERSION}/bind-${BIND_VERSION}.tar.gz \
+ && tar -xzf bind-${BIND_VERSION}.tar.gz && rm -f bind-${BIND_VERSION}.tar.gz \
+ && cd bind-${BIND_VERSION} && ./configure \
+    --prefix=/usr \
+    --libdir=\${prefix}/lib/x86_64-linux-gnu \
+    --sysconfdir=/etc/bind \
+    --enable-threads \
+    --with-libtool \
+    --enable-shared \
+    --with-openssl=/usr \
+    --with-gssapi=/usr \
+    --with-gnu-ld \
+    --with-geoip=/usr \
+    --enable-ipv6 \
+    --enable-filter-aaaa \
+ && make install && cd / && rm -rf bind-${BIND_VERSION} \
+ && mkdir /var/bind
 
-ENV PKG_CONFIG_PATH /usr/local/lib64/pkgconfig/:/usr/local/lib/pkgconfig
+RUN wget https://www.nlnetlabs.nl/downloads/ldns/ldns-${LDNS_VERSION}.tar.gz \
+  && tar -xzf ldns-${LDNS_VERSION}.tar.gz && rm -f ldns-${LDNS_VERSION}.tar.gz \
+  && cd ldns-${LDNS_VERSION} && ./configure --disable-gost && make install \
+  && cd / && rm -rf ldns-${LDNS_VERSION}
 
-RUN curl -LO https://github.com/p11-glue/p11-kit/releases/download/0.23.14/p11-kit-0.23.14.tar.gz \
- && tar -xzC /tmp -f p11-kit-0.23.14.tar.gz && rm p11-kit-0.23.14.tar.gz \
- && cd /tmp/p11-kit-0.23.14 && ./configure && make && make install \
- && cd / && rm -r /tmp/p11-kit-0.23.14
-
-RUN curl -LO https://ftp.gnu.org/gnu/nettle/nettle-3.2.tar.gz \
- && tar -xzC /tmp -f nettle-3.2.tar.gz && rm nettle-3.2.tar.gz \
- && cd /tmp/nettle-3.2 && ./configure && make && make install \
- && cd / && rm -r /tmp/nettle-3.2
-
-RUN curl -LO https://www.gnupg.org/ftp/gcrypt/gnutls/v3.4/gnutls-3.4.9.tar.xz \
- && tar -xC /tmp -f gnutls-3.4.9.tar.xz && rm gnutls-3.4.9.tar.xz \
- && cd /tmp/gnutls-3.4.9 && ./configure && make && make install \
- && cd / && rm -r /tmp/gnutls-3.4.9
-
-RUN curl -O https://lttng.org/files/urcu/userspace-rcu-0.9.2.tar.bz2 \
- && tar -xjC /tmp -f userspace-rcu-0.9.2.tar.bz2 \
- && cd /tmp/userspace-rcu-0.9.2 && ./configure && make && make install \
- && cd / && rm -r /tmp/userspace-rcu-0.9.2
-
-RUN apt-get purge -y autotools-dev \
-                     build-essential \
-                     curl \
-                     gcc \
-                     g++ \
-                     libedit-dev \
-                     libidn11-dev \
-                     libgmp-dev \
-                     libjansson-dev \
-                     pkg-config
+RUN wget https://dist.opendnssec.org/source/opendnssec-${OPENDNSSEC_VERSION}.tar.gz \
+ && tar -xzf opendnssec-${OPENDNSSEC_VERSION}.tar.gz && rm -f opendnssec-${OPENDNSSEC_VERSION}.tar.gz \
+ && cd opendnssec-${OPENDNSSEC_VERSION} && ./configure && make install \
+ && cd / && rm -rf opendnssec-${OPENDNSSEC_VERSION} 
 
 ENTRYPOINT ["/usr/sbin/named"]
 
-CMD ["-g", "-u", "bind"]
+CMD ["-g"]

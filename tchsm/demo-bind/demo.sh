@@ -15,7 +15,7 @@ function build {
     set -e
 
     docker build -t tchsm-node-alpine ${DEMO_DIRECTORY}/../node/alpine
-    docker build -t tchsm-lib-ubuntu16 ${DEMO_DIRECTORY}/../lib/ubuntu16
+    docker build -t tchsm-lib-centos7 ${DEMO_DIRECTORY}/../lib/centos7
     docker build -t tchsm-demo-bind ${DEMO_DIRECTORY}/.
 }
 

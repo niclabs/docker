@@ -4,7 +4,6 @@ RUN yum install -y \
             autogen \
             cmake \
             json-c-devel \
-            git \
             gmp-devel \
             jansson-devel \
             libconfig-devel \
@@ -13,9 +12,7 @@ RUN yum install -y \
             make \
             m4 \
             sqlite-devel \
-            unzip \
             wget
-
 
 RUN yum install -y gcc gcc-c++
 
@@ -57,3 +54,19 @@ RUN wget http://github.com/niclabs/tchsm-libdtc/archive/v0.1.tar.gz \
  && cmake -DBUILD_TESTING=OFF .. \
  && make install \
  && cd / && rm -rf /tmp/tchsm-libdtc-0.1
+
+RUN yum remove -y \
+            autogen \
+            cmake \
+            json-c-devel \
+            gmp-devel \
+            jansson-devel \
+            libconfig-devel \
+            libedit-devel \
+            libuuid-devel \
+            make \
+            m4 \
+            sqlite-devel \
+            wget
+
+RUN yum remove -y gcc gcc-c++
