@@ -43,10 +43,16 @@ RUN wget https://www.nlnetlabs.nl/downloads/ldns/ldns-${LDNS_VERSION}.tar.gz \
   && cd ldns-${LDNS_VERSION} && ./configure --disable-gost && make install \
   && cd / && rm -rf ldns-${LDNS_VERSION}
 
+COPY conf_files/opendnssec/ /etc/opendnssec/
+
 RUN wget https://dist.opendnssec.org/source/opendnssec-${OPENDNSSEC_VERSION}.tar.gz \
  && tar -xzf opendnssec-${OPENDNSSEC_VERSION}.tar.gz && rm -f opendnssec-${OPENDNSSEC_VERSION}.tar.gz \
  && cd opendnssec-${OPENDNSSEC_VERSION} && ./configure && make install \
- && cd / && rm -rf opendnssec-${OPENDNSSEC_VERSION} 
+ && cd / && rm -rf opendnssec-${OPENDNSSEC_VERSION}
+
+COPY conf_files/cryptoki.conf /cryptoki.conf
+ENV TCHSM_CONFIG=/cryptoki.conf
+RUN ods-ksmutil setup <<< "y" && ods-control start
 
 ENTRYPOINT ["/usr/sbin/named"]
 
