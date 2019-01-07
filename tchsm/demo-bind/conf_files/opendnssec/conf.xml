@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Configuration>
+
+	<RepositoryList>
+		<!-- pkcs11:token=TCBHSM;pin-value=1234 /usr/local/lib/libpkcs11.so -->
+		<Repository name="TCHSM">
+			<Module>/usr/local/lib/libpkcs11.so</Module>
+			<TokenLabel>TCBHSM</TokenLabel>
+			<PIN>1234</PIN>
+			<SkipPublicKey/>
+		</Repository>
+	</RepositoryList>
+
+	<Common>
+		<Logging>
+			<Verbosity>3</Verbosity>
+			<Syslog><Facility>local0</Facility></Syslog>
+		</Logging>
+		<PolicyFile>/etc/opendnssec/kasp.xml</PolicyFile>
+		<ZoneListFile>/etc/opendnssec/zonelist.xml</ZoneListFile>
+	</Common>
+
+	<Enforcer>
+		<Datastore><SQLite>/var/opendnssec/kasp.db</SQLite></Datastore>
+		<Interval>PT3600S</Interval>
+	</Enforcer>
+
+	<Signer>
+		<WorkingDirectory>/var/opendnssec/tmp</WorkingDirectory>
+		<WorkerThreads>4</WorkerThreads>
+		<Listener>
+			<Interface><Port>53</Port></Interface>
+		</Listener>
+	</Signer>
+
+</Configuration>
