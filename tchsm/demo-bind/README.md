@@ -2,7 +2,7 @@
 # TCHSM Demo
 
 # Demo of a DNS server with DNSSEC support using the TCHSM
-Docker based demo of the TCHSM as cryptographic backend on BIND and [OpenDNSSEC](opendnssec.md). The demo uses the PKCS#11 implementation of OpenDNSSEC because the [native implementation of BIND have problems](problems_bind_pkcs11.md).
+Docker based demo of the TCHSM as cryptographic backend on BIND and [OpenDNSSEC](opendnssec.md). The demo uses the PKCS#11 implementation of OpenDNSSEC because the [native implementation of BIND have problems](bind_problems_PKCS#11.md).
 
 
 ## Run the Demo

@@ -1,6 +1,8 @@
+# TCHSM with OpenDNSSEC
+
 #### OpenDNSSEC
 
-The docker use [OpenDNSSEC](https://www.opendnssec.org/) because provides a implementation of PKCS#11 how is easy to use and config. The follow config are include in the dockerfile but if you wanna debug something in the following  steps it describe the installation of the depencies separatly.
+The docker uses [OpenDNSSEC](https://www.opendnssec.org/) for signing DNS zones because it provides an easy to use implementation of PKCS#11 for using HSMs. The follow config are include in the dockerfile but if you wanna debug something in the following  steps it describe the installation of the depencies separatly.
 
 ##### Installation on Ubuntu 18.04
 
