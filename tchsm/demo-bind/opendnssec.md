@@ -42,7 +42,6 @@ wget https://dist.opendnssec.org/source/opendnssec-${OPENDNSSEC_VERSION}.tar.gz
 tar -xzf opendnssec-${OPENDNSSEC_VERSION}.tar.gz
 rm -f opendnssec-${OPENDNSSEC_VERSION}.tar.gz
 cd opendnssec-${OPENDNSSEC_VERSION}
-./configure --with-database-backend=mysql
 make install
 cd ..
 rm -rf opendnssec-${OPENDNSSEC_VERSION}
