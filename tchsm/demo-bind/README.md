@@ -2,7 +2,8 @@
 # TCHSM Demo
 
 # Demo of a DNS server with DNSSEC support using the TCHSM
-Docker based demo of the TCHSM as cryptographic backend on BIND and [OpenDNSSEC](opendnssec.md) who implementing DNSSEC.
+Docker based demo of the TCHSM as cryptographic backend on BIND and [OpenDNSSEC](opendnssec.md). The demo uses the PKCS#11 implementation of OpenDNSSEC because the [native implementation of BIND have problems](problems_bind_pkcs11.md).
+
 
 ## Run the Demo
 
@@ -60,6 +61,8 @@ The OpenDNSSEC DNS server uses the tchsm library as cryptographic backend for si
 
 
 /change/ 
+
+
 
 The demo only signs the exmaple.com zone manually, the knot server configuration is not intended to be used in production. For a full explanation of how to configure the knot server see [https://www.knot-dns.cz/docs/2.5/html/configuration.html](https://www.knot-dns.cz/docs/2.5/html/configuration.html)
 
