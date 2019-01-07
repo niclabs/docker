@@ -2,7 +2,7 @@
 # TCHSM Demo
 
 # Demo of a DNS server with DNSSEC support using the TCHSM
-Docker based demo of the TCHSM as cryptographic backend on BIND and [OpenDNSSEC](opendnssec.md). The demo uses the PKCS#11 implementation of OpenDNSSEC because the [native implementation of BIND have problems](bind_problems_PKCS#11.md).
+Docker based demo of the TCHSM as cryptographic backend on BIND and [OpenDNSSEC](opendnssec.md). The demo uses the PKCS#11 implementation of OpenDNSSEC because the [native implementation of BIND have problems](bind_problems_PKCS11.md).
 
 
 ## Run the Demo
@@ -60,7 +60,7 @@ The DNS Server runs an extension of the `tchsm lib` container which also has [BI
 The OpenDNSSEC DNS server uses the tchsm library as cryptographic backend for signing.
 
 
-/change/ 
+change
 
 
 
@@ -72,3 +72,9 @@ Before running the server we copy the configuration files from the `conf_files/b
  - `knot.conf`: This file configures the knot DNS server. It specifies the port the server will listen, and the zones it will sign. In the demo we will only sign a dummy example.com manually.
  - `example.com`: File with the example.com DNS records.
  - `run.sh`: Script	to be run by the container on startup. The script configures the knot server top use the tchsm version of the libpkcs11.so library, then generates the keys for the example.com zone and finally starts the knot server.
+
+
+### Test Server
+
+### Benchmark 
+
