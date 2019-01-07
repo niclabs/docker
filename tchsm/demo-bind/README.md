@@ -1,7 +1,8 @@
+
 # TCHSM Demo
 
 # Demo of a DNS server with DNSSEC support using the TCHSM
-Docker based demo of the TCHSM as cryptographic backend for a knot DNS server implementing DNSSEC.
+Docker based demo of the TCHSM as cryptographic backend on BIND and [OpenDNSSEC](/opendnssec.md) who implementing DNSSEC.
 
 ## Run the Demo
 
@@ -53,12 +54,17 @@ To see how to configure and run a single node see [our node web admin](https://g
 
 ### DNS Server
 
-The DNS Server runs an extension of the `tchsm lib` container which also has [Knot-DNS](https://www.knot-dns.cz/) installed.
-The Knot DNS server uses the tchsm library as cryptographic backend for signing.
+The DNS Server runs an extension of the `tchsm lib` container which also has [BIND](https://www.isc.org/downloads/bind/) and [OpenDNSSEC](https://www.opendnssec.org/) installed.
+
+The OpenDNSSEC DNS server uses the tchsm library as cryptographic backend for signing.
+
+
+/change/ 
 
 The demo only signs the exmaple.com zone manually, the knot server configuration is not intended to be used in production. For a full explanation of how to configure the knot server see [https://www.knot-dns.cz/docs/2.5/html/configuration.html](https://www.knot-dns.cz/docs/2.5/html/configuration.html)
 
-Before running the server we copy the configuration files from the `conf_files/knot` directory into the container.
+
+Before running the server we copy the configuration files from the `conf_files/bind` directory into the container.
  - `cryptoki.conf`: This file configures the master for the nodes and contains the master public and private keys, it also contains a list of all the nodes including their IP addresses, ports and public keys.
  - `knot.conf`: This file configures the knot DNS server. It specifies the port the server will listen, and the zones it will sign. In the demo we will only sign a dummy example.com manually.
  - `example.com`: File with the example.com DNS records.
