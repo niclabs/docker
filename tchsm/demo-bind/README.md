@@ -54,7 +54,7 @@ To see how to configure and run a single node see [our node web admin](https://g
 
 ### DNS Server
 
-The DNS Server runs an extension of the `tchsm lib` container which also has [BIND](https://www.isc.org/downloads/bind/) and [OpenDNSSEC](https://www.opendnssec.org/) installed.
+The DNS Server runs an extension of the `tchsm lib` container which also has [BIND](https://www.isc.org/downloads/bind/) and [OpenDNSSEC](opendnssec.md) installed.
 
 The OpenDNSSEC DNS server uses the tchsm library as cryptographic backend for signing.
 
