@@ -156,3 +156,4 @@ www.google.com.		59 IN A	64.233.190.99
 
 ### Benchmark 
 
+For testing opendnssec we use https://github.com/opendnssec/p11speed
