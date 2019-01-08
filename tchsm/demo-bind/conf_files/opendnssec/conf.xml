@@ -8,7 +8,6 @@
 			<Module>/usr/local/lib/libpkcs11.so</Module>
 			<TokenLabel>TCBHSM</TokenLabel>
 			<PIN>1234</PIN>
-			<SkipPublicKey/>
 		</Repository>
 	</RepositoryList>
 
