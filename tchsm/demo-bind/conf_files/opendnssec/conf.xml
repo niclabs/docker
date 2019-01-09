@@ -8,6 +8,7 @@
 			<Module>/usr/local/lib/libpkcs11.so</Module>
 			<TokenLabel>TCBHSM</TokenLabel>
 			<PIN>1234</PIN>
+			<SkipPublicKey/>
 		</Repository>
 	</RepositoryList>
 
@@ -28,9 +29,11 @@
 	<Signer>
 		<WorkingDirectory>/var/opendnssec/tmp</WorkingDirectory>
 		<WorkerThreads>4</WorkerThreads>
+		<!--
 		<Listener>
 			<Interface><Port>53</Port></Interface>
 		</Listener>
+		-->
 	</Signer>
 
 </Configuration>

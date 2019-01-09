@@ -43,6 +43,10 @@ RUN wget https://www.nlnetlabs.nl/downloads/ldns/ldns-${LDNS_VERSION}.tar.gz \
   && cd ldns-${LDNS_VERSION} && ./configure --disable-gost && make install \
   && cd / && rm -rf ldns-${LDNS_VERSION}
 
+# Enable RSyslogs on CentOS, start service by runnig the command "rsyslogd"
+RUN yum -y install rsyslog && cd /etc && rm -f rsyslog.d/listen.conf && rm -f rsyslog.conf \
+ && wget https://raw.githubusercontent.com/rsyslog/rsyslog-docker/master/base/centos7/rsyslog.conf
+
 COPY conf_files/opendnssec/ /etc/opendnssec/
 
 RUN wget https://dist.opendnssec.org/source/opendnssec-${OPENDNSSEC_VERSION}.tar.gz \
