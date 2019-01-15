@@ -7,10 +7,10 @@
 		<SignerConfiguration>/var/opendnssec/signconf/example.com.xml</SignerConfiguration>
 		<Adapters>
 			<Input>
-				<Adapter type="File">/var/opendnssec/unsigned/example.com</Adapter>
+				<Adapter type="File">/etc/bind/zones/db.example.com</Adapter>
 			</Input>
 			<Output>
-				<Adapter type="File">/var/opendnssec/signed/example.com</Adapter>
+				<Adapter type="File">/etc/bind/zones/signed/db.example.com</Adapter>
 			</Output>
 		</Adapters>
 	</Zone>
