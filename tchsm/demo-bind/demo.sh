@@ -31,6 +31,8 @@ function start {
 
     docker -D run --net=tchsm -d -p ${EXPOSE_PORT}:53 -p ${EXPOSE_PORT}:53/udp -p ${WEBMIN_PORT}:10000 -v $DEMO_DIRECTORY/conf_files/bind/etc:/etc/bind --name bind-tchsm-demo tchsm-demo-bind
 
+    docker exec bind-tchsm-demo mkdir -p /etc/bind/zones/signed
+
     docker exec bind-tchsm-demo /bin/bash -c "echo 'root:$WEBMIN_PASSWORD' | chpasswd"
     docker exec bind-tchsm-demo /etc/init.d/webmin start
 }
