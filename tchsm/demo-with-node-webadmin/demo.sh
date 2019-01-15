@@ -1,4 +1,4 @@
-
+#!/usr/bin/env bash
 
 DEMO_DIR_=`dirname $0`
 DEMO_DIR=`readlink -e $DEMO_DIR_`
@@ -6,8 +6,9 @@ CONF_DIR="${DEMO_DIR}/config_files"
 
 NODES=3
 
-function usage {
+usage() {
 	echo "Usage: $0 build | start | stop"
+  exit 1
 }
 
 function build {
