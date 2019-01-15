@@ -61,8 +61,6 @@ To see how to configure and run a single node see [our node web admin](https://g
 Before running the server we copy the configuration files from the `conf_files/` directory into the container.
  - `cryptoki.conf`: This file configures the master for the nodes and contains the master public and private keys, it also contains a list of all the nodes including their IP addresses, ports and public keys. 
  - `bind/zones/db.example.com`: File with the example.com DNS records.
- 
- // hacer run.sh //
  - `run.sh`: Script to be run by the container on startup. The script configures the knot server top use the tchsm version of the libpkcs11.so library, then generates the keys for the example.com zone and finally starts the knot server.
 
 

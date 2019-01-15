@@ -19,10 +19,13 @@ Dockerfiles of the library, vanilla OS with the library installed.
 Dockerfiles of the node, vanilla OS with the nodes installed.
 
 ### node-webadmin
-Webadmin application to manage a single node
+Webadmin application to manage a single node.
 
-### demo
-Demonstration of the software running simple nodes with some DNS servers, it includes scripts to run the demo easily.
+### [demo-knot](https://github.com/npinochet/docker/tree/update-tchsm/tchsm/demo-knot)
+Demonstration of the software running simple nodes with one DNS server using [KNOT](https://www.knot-dns.cz/), it includes scripts to run the demo easily.
+
+### [demo-bind](https://github.com/npinochet/docker/tree/update-tchsm/tchsm/demo-bind)
+Demonstration of the software running simple nodes with one DNS server using [BIND](https://www.isc.org/downloads/bind/) and [OpenDNSSEC](https://www.opendnssec.org/), it includes scripts to run the demo easily.
 
 ### demo-with-node-webadmin
-Demonstration of the software running webadmin nodes with some DNS servers, it includes scripts to run the demo easily.
+Demonstration of the software running webadmin nodes with one DNS servers using KNOT, it includes scripts to run the demo easily.
