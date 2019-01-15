@@ -68,10 +68,10 @@ RUN wget https://github.com/niclabs/tchsm-libtc/archive/v0.2.tar.gz \
  && cd build && cmake -DBUILD_TESTING=OFF .. && make install \
  && cd / && rm -r /tmp/tchsm-libtc-0.2
 
-RUN wget http://github.com/niclabs/tchsm-libdtc/archive/v0.1.tar.gz \
- && echo 'fea5b5e61430daec2a33a46b002fd3358bf3e9a2  v0.1.tar.gz' | sha1sum -c \
- && tar -xzC /tmp -f v0.1.tar.gz && rm v0.1.tar.gz \
- && cd /tmp/tchsm-libdtc-0.1 \
+RUN wget http://github.com/niclabs/tchsm-libdtc/archive/v0.2.tar.gz \
+ && echo '32dc3a0abba75ede49393660f04070187be44b04  v0.2.tar.gz' | sha1sum -c \
+ && tar -xzC /tmp -f v0.2.tar.gz && rm v0.2.tar.gz \
+ && cd /tmp/tchsm-libdtc-0.2 \
  && mkdir build && cd build \
  && cmake  .. \
  && make install

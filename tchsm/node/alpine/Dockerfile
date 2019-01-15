@@ -38,11 +38,11 @@ RUN wget https://github.com/niclabs/tchsm-libtc/archive/master.zip \
  && cd /tmp/tchsm-libtc-master && mkdir build && cd build && cmake .. && make install \
  && cd / && rm -r /tmp/tchsm-libtc-master
 
-RUN wget https://github.com/niclabs/tchsm-libdtc/archive/v0.1.zip \
- && unzip v0.1.zip -d /tmp && rm v0.1.zip \
- && cd /tmp/tchsm-libdtc-0.1 && mkdir build \
+RUN wget https://github.com/niclabs/tchsm-libdtc/archive/v0.2.zip \
+ && unzip v0.2.zip -d /tmp && rm v0.2.zip \
+ && cd /tmp/tchsm-libdtc-0.2 && mkdir build \
  && cd build && cmake -DCMAKE_BUILD_TYPE=Debug -DBUILD_TESTING=OFF .. && make tchsm_node install \
- && cd / && rm -r /tmp/tchsm-libdtc-0.1
+ && cd / && rm -r /tmp/tchsm-libdtc-0.2
 
 RUN apk del cmake \
             gcc \
