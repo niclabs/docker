@@ -30,7 +30,7 @@ RUN wget https://dist.opendnssec.org/source/opendnssec-${OPENDNSSEC_VERSION}.tar
  && cd opendnssec-${OPENDNSSEC_VERSION} && ./configure && make install \
  && cd / && rm -rf opendnssec-${OPENDNSSEC_VERSION}
 
-ENV TCHSM_CONFIG=etc/cryptoki_TCHSM.conf
+ENV TCHSM_CONFIG=/cryptoki_TCHSM.conf
 RUN ods-ksmutil setup <<< "y"
 
 ENTRYPOINT ["/usr/local/sbin/ods-control"]
