@@ -21,8 +21,10 @@ docker build -t tchsm-opendnssec /path/to/docker-tchsm/opendnssec
 * Create docker container running OpenDNSSEC:
 ```
 docker run --net=host -d -v /etc/opendnssec:/etc/opendnssec -v /etc/cryptoki_TCHSM.conf:/cryptoki_TCHSM.conf --name opendnssec tchsm-opendnssec
+docker exec opendnssec rsyslogd
+docker exec opendnssec ods-control start
 ```
-* You can see docker logs with the command: `docker logs -f opendnssec`
+* You can see the docker logs with the command: `docker exec opendnssec tail /var/log/messages [--follow|-f]`
 
 
 ### TCHSM Node
@@ -35,5 +37,9 @@ docker build -t tchsm-node-alpine /path/to/docker-tchsm/node/alpine
 ```
 docker run --net=host -d -v /etc/TCHSM_node.conf:/TCHSM_node.conf --name node-tchsm tchsm-node-alpine -c /TCHSM_node.conf
 ```
-* You can see docker logs with the command: `docker logs -f node-tchsm`
+* You can see the docker logs with the command: `docker logs [--follow|-f] node-tchsm`
+
+## Bind Setup
+
+Now that OpenDNSSEC is running, to link it up with Bind you have to configure Bind to look for the signed zone. The path to the signed zone can be found on the `zonelist.xml` config file of OpenDNSSEC under the `<Output>` tag. You just have to change Bind's configuration file to point to the signed zone file rather than the unsigned one.
 
