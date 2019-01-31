@@ -21,13 +21,13 @@ Dockerfiles of the node, vanilla OS with the nodes installed.
 ### node-webadmin
 Webadmin application to manage a single node.
 
-### [demo-knot](https://github.com/niclabs/docker/tree/update-tchsm/tchsm/demo-knot)
+### [demo-knot](https://github.com/niclabs/docker/tchsm/demo-knot)
 Demonstration of the software running simple nodes with one DNS server using [KNOT](https://www.knot-dns.cz/), it includes scripts to run the demo easily.
 
-### [demo-bind](https://github.com/niclabs/docker/tree/update-tchsm/tchsm/demo-bind)
+### [demo-bind](https://github.com/niclabs/docker/tchsm/demo-bind)
 Demonstration of the software running simple nodes with one DNS server using [BIND](https://www.isc.org/downloads/bind/) and [OpenDNSSEC](https://www.opendnssec.org/), it includes scripts to run the demo easily.
 
-### [docker-tchsm](https://github.com/niclabs/docker/tree/update-tchsm/tchsm/docker-tchsm)
+### [docker-tchsm](https://github.com/niclabs/docker/tchsm/docker-tchsm)
 Files and instructions to run TCHSM on intralabs.
 
 ### demo-with-node-webadmin
