@@ -54,7 +54,7 @@ RUN curl -LO  http://botan.randombit.net/releases/Botan-1.10.17.tgz \
  && ldconfig \
  && cd / && rm -r /tmp/Botan-1.10.17
 
-RUN curl -LO 'https://downloads.sourceforge.net/project/mhash/mhash/0.9.9.9/mhash-0.9.9.9.tar.gz?r=https%3A%2F%2Fsourceforge.net%2Fprojects%2Fmhash%2Ffiles%2Fmhash%2F0.9.9.9%2Fmhash-0.9.9.9.tar.gz%2Fdownload%3Fuse_mirror%3Dautoselect&ts=1551892142&use_mirror=autoselect'\
+RUN curl -L 'https://downloads.sourceforge.net/project/mhash/mhash/0.9.9.9/mhash-0.9.9.9.tar.gz?r=https%3A%2F%2Fsourceforge.net%2Fprojects%2Fmhash%2Ffiles%2Fmhash%2F0.9.9.9%2Fmhash-0.9.9.9.tar.gz%2Fdownload%3Fuse_mirror%3Dautoselect&ts=1551892142&use_mirror=autoselect' -o mhash-0.9.9.9.tar.gz \ 
  && echo 'c898de5ea60d9e0873a1b73caa031bb1b5797c03  mhash-0.9.9.9.tar.gz' | sha1sum -c \
  && tar -xzC /tmp -f mhash-0.9.9.9.tar.gz && rm mhash-0.9.9.9.tar.gz \
  && cd /tmp/mhash-0.9.9.9 && ./configure && make && make install \
@@ -64,6 +64,7 @@ RUN curl -LO http://www.hyperrealm.com/libconfig/libconfig-1.5.tar.gz \
  && echo '24306c7efce07669a4053d0977a45e2f3a3add79  libconfig-1.5.tar.gz' | sha1sum -c \
  && tar -xzC /tmp -f libconfig-1.5.tar.gz && rm libconfig-1.5.tar.gz \
  && cd /tmp/libconfig-1.5 && ./configure && make install \
+ && ldconfig \
  && cd / && rm -r /tmp/libconfig-1.5
 
 RUN wget https://github.com/niclabs/tchsm-libtc/archive/v0.2.tar.gz \
