@@ -18,13 +18,13 @@ RUN yum install -y \
             unzip \
             wget
             
-RUN cd /tmp & curl -L -O http://ftp.gnu.org/gnu/autoconf/autoconf-2.69.tar.gz \
-            & tar zxf autoconf-2.69.tar.gz \
-            & cd autoconf-2.69 \
-            & ./configure \
-            & make && make install \
-            & cd /tmp
-            & rm -rf autoconf-2.69
+RUN cd /tmp && curl -L -O http://ftp.gnu.org/gnu/autoconf/autoconf-2.69.tar.gz \
+            && tar zxf autoconf-2.69.tar.gz \
+            && cd autoconf-2.69 \
+            && ./configure \
+            && make && make install \
+            && cd /tmp
+            && rm -rf autoconf-2.69
 
 RUN curl -L https://people.centos.org/tru/devtools-2/devtools-2.repo -o /etc/yum.repos.d/devtools-2.repo && yum install -y devtoolset-2-gcc devtoolset-2-binutils devtoolset-2-gcc-c++
 
@@ -32,7 +32,7 @@ ENV PKG_CONFIG_PATH ${PKG_CONFIG_PATH}:/usr/local/lib/pkgconfig
 ENV CXX /opt/rh/devtoolset-2/root/usr/bin/g++
 ENV CC /opt/rh/devtoolset-2/root/usr/bin/cc
 
-RUN mkdir pgp_keys
+RUN mkdir gpg_keys
 
 COPY gpg_keys/ gpg_keys/
 
@@ -44,7 +44,7 @@ RUN cd /tmp && git clone --depth 1 git://github.com/zeromq/libzmq.git && cd libz
 
 RUN cd /tmp/libzmq && make install && ldconfig
 
-RUN cd /tmp & rm -rf libzmq libsodium
+RUN cd /tmp && rm -rf libzmq libsodium
 
 RUN curl -LO  http://botan.randombit.net/releases/Botan-1.10.17.tgz \
  && curl -LO  http://botan.randombit.net/releases/Botan-1.10.17.tgz.asc \
