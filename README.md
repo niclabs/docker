@@ -5,7 +5,7 @@ Repositoy to store Dockerfiles for Niclabs projects
 * ```adkintunmobile/```: Adkintun Mobile is an Android application project for monitoring QoS on mobile network. For more information, visit the repository [here](https://www.github.com/niclabs/adkintunmobile).
 * ```ratadns/```: RaTA DNS is a real time analytics project for DNS servers. Visit the repository [here](https://www.github.com/niclabs/ratadns).
 * ```tchsm/```: The Threshold Cryptography Hardware Security Module project provides a distributed software to emulate a HSM. For more information, visit the [repository](https://www.github.com/niclabs/tchsm).
-* ```embeddable/```: Provides a ready to use development environment for building and testing embedded applications.
+* ```embeddable/```: Provides a ready to use development environment for building, testing and running CI tasks for embedded applications.
 
 # Contributing
 This repository is intended to contain only Dockerfiles and instructions related to its use.
