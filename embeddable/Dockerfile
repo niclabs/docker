@@ -80,8 +80,6 @@ ENV NRF52_SDK_ROOT /usr/nrf52-sdk
 RUN pip -q install --upgrade pip
 RUN pip -q install setuptools
 
-WORKDIR /tmp
-
 # Install IoT-Lab cli-tools and ssh-cli-tools
 RUN pip install iotlabcli==2.5.4 && iotlabsshcli==0.2.3
 
