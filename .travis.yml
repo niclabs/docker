@@ -5,10 +5,10 @@ notifications:
 
 # The test script for each build
 script:
-	# Build embeddable docker image if the dockerfile changed
+  # Build embeddable docker image if the dockerfile changed
   - >
     if [ $EMBEDDABLE_CHANGED != 0 ]; then
-			DOCKER_IMG=niclabs/embeddable
+      DOCKER_IMG=niclabs/embeddable
       echo "Embeddable docker image changed, build from Dockerfile"
       docker build embeddable -t $DOCKER_IMG;
       if [ $? != 0 ]; then
@@ -26,5 +26,5 @@ script:
 env:
   # Global environment variables, i.e., set for all builds
   global:
-  	# Check if anything has changed within the embeddable directory
+    # Check if anything has changed within the embeddable directory
   	- EMBEDDABLE_CHANGED=`git diff --name-only $TRAVIS_COMMIT_RANGE -- embeddable/ | wc -l`
