@@ -139,5 +139,5 @@ WORKDIR ${HOME}
 # Enable IPv6 -- must be done at runtime, hence added to .profile
 RUN echo "sudo sysctl -w net.ipv6.conf.all.disable_ipv6=0 > /dev/null" >> ${HOME}/.profile
 
-# Start a bash
+# Start a bash shell
 CMD bash --login
