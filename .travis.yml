@@ -1,0 +1,30 @@
+# Setup environment for Docker
+language: generic
+notifications:
+  email: false
+
+# The test script for each build
+script:
+	# Build embeddable docker image if the dockerfile changed
+  - >
+    if [ $EMBEDDABLE_CHANGED != 0 ]; then
+			DOCKER_IMG=niclabs/embeddable
+      echo "Embeddable docker image changed, build from Dockerfile"
+      docker build embeddable -t $DOCKER_IMG;
+      if [ $? != 0 ]; then
+        echo "Failed to build Docker image"
+        exit 1
+      fi
+      if [ $TRAVIS_SECURE_ENV_VARS == true ] && [ $TRAVIS_PULL_REQUEST == false ] && [ $TRAVIS_BRANCH == 'develop' ]; then
+        echo "This build is for an update of branch develop. Push image to Dockerhub"
+        echo $DOCKERHUB_PASSWD | docker login --username flalanne --password-stdin
+        docker push $DOCKER_IMG;
+      fi
+    fi
+
+# Environment variables
+env:
+  # Global environment variables, i.e., set for all builds
+  global:
+  	# Check if anything has changed within the embeddable directory
+  	- EMBEDDABLE_CHANGED=`git diff --name-only $TRAVIS_COMMIT_RANGE -- embeddable/ | wc -l`
