@@ -27,4 +27,4 @@ env:
   # Global environment variables, i.e., set for all builds
   global:
     # Check if anything has changed within the embeddable directory
-  	- EMBEDDABLE_CHANGED=`git diff --name-only $TRAVIS_COMMIT_RANGE -- embeddable/ | wc -l`
+    - EMBEDDABLE_CHANGED=`git diff --name-only $TRAVIS_COMMIT_RANGE -- embeddable/ | wc -l`
