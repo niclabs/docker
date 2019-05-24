@@ -53,6 +53,11 @@ On Linux, you can add the following to `~/.profile` or similar, for instance, to
 alias embeddable="docker run --privileged --mount type=bind,source=\$PWD,destination=/home/user/\$(basename \$PWD) --workdir /home/user/\$(basename \$PWD) -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix -v /dev/bus/usb:/dev/bus/usb -ti niclabs/embeddable"
 ```
 
+For the change to take effect you need to reload the configuration (or open another shell session)
+```bash
+$ source ~/.bashrc
+```
+
 This will mount the current working directory with the equivalent name inside the home directory in the container
 
 # Launching and Exiting
