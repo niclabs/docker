@@ -17,7 +17,7 @@ script:
       fi
       if [ $TRAVIS_SECURE_ENV_VARS == true ] && [ $TRAVIS_PULL_REQUEST == false ]; then
         echo "This build is for an update of branch develop. Push image to Dockerhub"
-        echo $DOCKERHUB_PASSWD | docker login --username flalanne --password-stdin
+        echo $DOCKERHUB_PASSWD | docker login --username $DOCKERHUB_USER --password-stdin
         docker push $DOCKER_IMG;
       fi
     fi
