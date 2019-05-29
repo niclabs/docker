@@ -23,6 +23,7 @@ RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E03280
     iputils-tracepath \
     libcanberra-gtk-module:i386 \
     libgtk2.0-0 \
+    libncurses-dev \
     mono-complete \
     mosquitto \
     mosquitto-clients \
