@@ -5,7 +5,7 @@ FROM 32bit/ubuntu:16.04
 LABEL maintainer="Felipe Lalanne <flalanne@niclabs.cl>"
 
 ENV DEBIAN_FRONTEND noninteractive
-ARG USER=dev
+ARG USER=user
 ARG UID=1000
 ARG GID=100
 
