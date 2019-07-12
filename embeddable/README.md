@@ -25,11 +25,7 @@ We provide a Docker image for this container hosted on DockerHub, as `niclabs/em
 
 # Setup
 
-To get started, install Docker. On Ubuntu for instance (you'll need set up the repository; see [install-docker-ce](https://docs.docker.com/install/linux/docker-ce/ubuntu/#install-docker-ce) for details):
-
-```bash
-$ sudo apt-get install docker-ce
-```
+To get started, [install Docker](https://docs.docker.com/install/). Follow these instructions to [install Docker in Ubuntu](https://docs.docker.com/install/linux/docker-ce/ubuntu/#install-docker-ce), for instance:
 
 Make sure your user is added to the unix group `docker`:
 ```bash
@@ -50,7 +46,7 @@ This way, you can work on the codebase using host tools / editors, and build/run
 Then, it is a good idea to create an alias that will help start docker with all required options.
 On Linux, you can add the following to `~/.profile` or similar, for instance, to `~/.bashrc`:
 ```bash
-alias embeddable="docker run --privileged --mount type=bind,source=\$PWD,destination=/home/user/\$(basename \$PWD) --workdir /home/user/\$(basename \$PWD) -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix -v /dev/bus/usb:/dev/bus/usb -ti niclabs/embeddable"
+alias embeddable="docker run --privileged --mount type=bind,source=\$PWD,destination=/home/user/work -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix -v /dev/bus/usb:/dev/bus/usb -ti niclabs/embeddable"
 ```
 
 For the change to take effect you need to reload the configuration (or open another shell session)
@@ -68,7 +64,7 @@ To start a bash inside a new container, simply type:
 $ embeddable
 ```
 
-You will be under `/home/user/$(basename $PWD)` in the container, which is mapped to the current working directory in the host.
+You will be under `/home/user/work` in the container, which is mapped to the current working directory in the host.
 
 ## Additional shell for existing container
 Typing `embeddable` as above will launch a new container. Sometimes it is useful to have multiple terminal sessions within a single container, e.g., to run a tunslip6 on one terminal and other commands on another one. To achieve this, start by running:
@@ -81,6 +77,15 @@ This will present you with a list of container IDs. Select the ID of the contain
 ```bash
 $ docker exec -it <the ID> /bin/bash
 ```
+
+## Permissions
+
+By default, the container runs as user 'user' (uid 1000). All of the files under /home/user are group writable by the group 'users' (gid 100). 
+
+Under Linux, mounted folders and files inside the container retain the ownership and permissions of the host, making it impossible to modify by a user with a different user id (and causing commands such as make to fail if the uid of of the host user is different than 1000). For this, the container will change group ownership and permissions of the folder mounted under '/home/user/work' if it is not user writable on launch (see entrypoint.sh). To prevent this while still making the files writable, try one of the following options:
+
+- Mount volume to a folder other than /home/user/work
+- Run the container with the UID of the host user, by using docker option `-u $(id -u)`. To maintain write access to files under the /home/user folder, you can also add the option `--group-add users`.
 
 ## Exit
 To exit a container, use `exit`.
@@ -107,12 +112,12 @@ $ embeddable cooja
 
 It is also possible to start a container to just run one command, e.g.:
 ```bash
-$ embeddable bash -c ls
+$ embeddable ls
 ```
 
 To run CI tests:
 ```bash
-$ embeddable bash -c "make -C tests"
+$ embeddable "make test"
 ```
 The user has `sudo` rights with no password (obviously sandboxed in the container).
 
@@ -131,7 +136,7 @@ The user has `sudo` rights with no password (obviously sandboxed in the containe
 1. Open `cmd.exe` (you can use PowerShell if you want)
 1. Hit the following command (replace `/c/Users/foobar/my-project` with a location of of your project local repository in your environment)
 ```
-C:\> docker run --privileged --mount type=bind,source=/c/Users/foobar/my-project,destination=/home/user/my-project --workdir=/home/user/my-project -e DISPLAY="host.docker.internal:0.0" -ti niclabs/embeddable
+C:\> docker run --privileged --mount type=bind,source=/c/Users/foobar/my-project,destination=/home/user/work -e DISPLAY="host.docker.internal:0.0" -ti niclabs/embeddable
 ```
 Tested with Windows 10, version 1809.
 
@@ -158,16 +163,14 @@ If you don't need to run `cooja` with its GUI, the setup procedure becomes simpl
 ### for "Docker for Mac"
 ```bash
 alias embeddable="docker run --privileged \
-               --mount type=bind,source=\$PWD,destination=/home/user/\$(basename \$PWD) \
-               --workdir /home/user/\$(basename \$PWD) \
+               --mount type=bind,source=\$PWD,destination=/home/user/work \
                -ti niclabs/embeddable"
 ```
 
 ### for "Docker Toolbox on macOS"
 ```bash
 alias embeddable="docker run --privileged \
-               --mount type=bind,source=$PWD,destination=/home/user/$(basename $PWD) \
-               --workdir /home/user/\$(basename \$PWD) \
+               --mount type=bind,source=$PWD,destination=/home/user/work \
                --device=/dev/ttyUSB0 \
                --device=/dev/ttyUSB1 \
                -ti niclabs/embeddable"
@@ -207,11 +210,10 @@ embeddable () {
         xauth add \${DISPLAY_NAME} . \${XAUTH_HEXKEY}
         $@"
     docker run --privileged                                                                 \
-               --mount type=bind,source=$(pwd),destination=/home/user/$(basename $(pwd)) \
-               --workdir /home/user/$(basename $(pwd))                                   \
+               --mount type=bind,source=$(pwd),destination=/home/user/work \
                -v ~/.Xauthority:/home/user/dot.Xauthority:ro                             \
                -ti niclabs/embeddable                                                       \
-               bash -c "${COMMAND_STRING}"
+               "${COMMAND_STRING}"
 }
 ```
 
@@ -226,13 +228,12 @@ embeddable () {
         xauth add \${DISPLAY_NAME} . \${XAUTH_HEXKEY}
         $@"
     docker run --privileged                                                                 \
-               --mount type=bind,source=$(pwd),destination=/home/user/$(basename $(pwd)) \
+               --mount type=bind,source=$(pwd),destination=/home/user/work \
                -v ~/.Xauthority:/home/user/dot.Xauthority:ro                             \
-               --workdir /home/user/$(basename $(pwd))                                   \
                --device=/dev/ttyUSB0                                                        \
                --device=/dev/ttyUSB1                                                        \
                -ti niclabs/embeddable                                                       \
-               bash -c "${COMMAND_STRING}"
+               "${COMMAND_STRING}"
 }
 ```
 You need to enable USB devices in VirtualBox; start Virtualbox, and edit the settings for the machine running Docker to allow USB devices. You may want to download Oracle VM VirtualBox Extension Pack for USB 2.0 and USB 3.0 drivers.
