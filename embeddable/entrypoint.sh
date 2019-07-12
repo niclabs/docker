@@ -17,6 +17,9 @@ if [ $(id -u) == 0 ] ; then
         chmod +6000 /home/user/work
     fi
 
+    # Enable IPV6
+    sysctl -w net.ipv6.conf.all.disable_ipv6=0 > /dev/null
+    
     # Exec the command as user with the PATH and the rest of
     # the environment preserved
     exec runuser -p -u user "${cmd[@]}"
@@ -48,6 +51,9 @@ else
     if [[ ! -w /home/user ]]; then
         echo 'Warning: Container must be run with group "users" to update files in /home/user'
     fi
+    
+    # Enable IPV6
+    sudo sysctl -w net.ipv6.conf.all.disable_ipv6=0 > /dev/null
 
     # Execute the command
     exec "${cmd[@]}"

@@ -139,9 +139,6 @@ RUN cd ${CONTIKI} && \
 RUN ANT_OPTS=-Dfile.encoding=utf8 ant -q -f ${COOJA}/build.xml jar && \
         fix-permissions $HOME
 
-# Enable IPv6 -- must be done at runtime, hence added to .profile
-RUN echo "sudo sysctl -w net.ipv6.conf.all.disable_ipv6=0 > /dev/null" >> ${HOME}/.profile
-
 USER root
 
 ENTRYPOINT ["entrypoint.sh"]
