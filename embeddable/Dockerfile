@@ -5,7 +5,9 @@ FROM 32bit/ubuntu:16.04
 LABEL maintainer="Felipe Lalanne <flalanne@niclabs.cl>"
 
 ENV DEBIAN_FRONTEND noninteractive
-ARG username=user
+ARG USER=dev
+ARG UID=1000
+ARG GID=100
 
 # Tools
 RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF && \
@@ -38,7 +40,8 @@ RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E03280
     wget \
     curl \
     > /dev/null \
-  && apt-get -qq clean
+  && apt-get -qq clean && \
+  rm -rf /var/lib/apt/lists/*
 
 # Install coap-cli
 RUN npm -q install coap-cli -g \
@@ -79,37 +82,39 @@ RUN wget -nv https://developer.nordicsemi.com/nRF5_IoT_SDK/nRF5_IoT_SDK_v0.9.x/n
 ENV NRF52_SDK_ROOT /usr/nrf52-sdk
 
 # Upgrade pip to latest version
-RUN pip -q install --upgrade pip
-RUN pip -q install setuptools
-
 # Install IoT-Lab cli-tools and ssh-cli-tools
-RUN pip install iotlabcli==2.5.4 && iotlabsshcli==0.2.3
+RUN pip -q install --upgrade pip
+RUN pip -q install setuptools && \
+        pip install iotlabcli==2.5.4 && iotlabsshcli==0.2.3
 
-# Create user, enable X forwarding, add to group dialout
-# -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix
-RUN export uid=1000 gid=1000 && \
-    mkdir -p /home/${username} && \
-    echo "${username}:x:${uid}:${gid}:${username},,,:/home/${username}:/bin/bash" >> /etc/passwd && \
-    echo "${username}:x:${uid}:" >> /etc/group && \
-    echo "${username} ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers && \
-    chmod 0440 /etc/sudoers && \
-    chown ${uid}:${gid} -R /home/${username} && \
-    usermod -aG dialout ${username}
+# Add a script that we will use to correct permissions after running certain commands
+ADD fix-permissions /usr/local/bin/
 
-# Set user for what comes next
-USER ${username}
-
-# Environment variables
+# Set environment variables
 ENV JAVA_HOME           /usr/lib/jvm/default-java
-ENV HOME                /home/${username}
+ENV HOME                /home/${USER}
+ENV WORK                ${HOME}/work
 ENV CONTIKI             ${HOME}/contiki
 ENV COOJA               ${CONTIKI}/tools/cooja
 ENV                     PATH="${HOME}:${PATH}"
-WORKDIR                 ${HOME}
 
-# Create Cooja shortcut
+# Create user, enable X forwarding, add to group dialout
+# -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix
+RUN useradd -m -s /bin/bash -N -u $UID $USER && \
+    echo "${USER} ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers && \
+    chmod 0440 /etc/sudoers && \
+    chmod g+w /etc/passwd && \
+    usermod -aG dialout $USER && \
+    fix-permissions $HOME
+
+# Set user and workdir for what comes next
+USER ${UID}
+WORKDIR ${HOME}
+
+# Create Cooja shortcut and work directory
 RUN echo "#!/bin/bash\nant -Dbasedir=${COOJA} -f ${COOJA}/build.xml run" > ${HOME}/cooja && \
-  chmod +x ${HOME}/cooja
+  chmod +x ${HOME}/cooja && \
+  mkdir $WORK
 
 # Download, build and install Renode
 RUN git clone --quiet https://github.com/renode/renode.git \
@@ -124,20 +129,27 @@ RUN git clone https://github.com/iot-lab/openlab.git && \
 
 # Upgrade contiki source
 RUN cd ${CONTIKI} && \
-        git config --global user.email "info@niclabs.cl" && \
-        git config --global user.name "NIC Chile Research Labs" && \
+        git config user.email "devel@niclabs.cl" && \
+        git config user.name "NIC Labs Devel" && \
         git remote add contiki https://github.com/contiki-os/contiki.git && \
         git fetch contiki && \
         git merge --no-edit contiki/master
 
-# Build cooja
-RUN ANT_OPTS=-Dfile.encoding=utf8 ant -q -f ${COOJA}/build.xml jar
-
-# Working directory
-WORKDIR ${HOME}
+# Build cooja and fix all permissions
+RUN ANT_OPTS=-Dfile.encoding=utf8 ant -q -f ${COOJA}/build.xml jar && \
+        fix-permissions $HOME
 
 # Enable IPv6 -- must be done at runtime, hence added to .profile
 RUN echo "sudo sysctl -w net.ipv6.conf.all.disable_ipv6=0 > /dev/null" >> ${HOME}/.profile
 
-# Start a bash shell
-CMD bash --login
+USER root
+
+ENTRYPOINT ["entrypoint.sh"]
+CMD ["bash"]
+
+# Add local files as late as possible to avoid cache busting
+COPY entrypoint.sh /usr/local/bin/
+
+# Set workdir and switch back to dev to avoid accidental container runs as root
+WORKDIR $WORK
+USER ${UID}
