@@ -42,7 +42,7 @@ This way, you can work on the codebase using host tools / editors, and build/run
 Then, it is a good idea to create an alias that will help start docker with all required options.
 On Linux, you can add the following to `~/.profile` or similar, for instance, to `~/.bashrc`:
 ```bash
-alias embeddable="docker run --privileged --mount type=bind,source=\$PWD,destination=/home/user/work -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix -v /dev/bus/usb:/dev/bus/usb -ti niclabs/embeddable"
+alias embeddable='docker run --rm --privileged --mount type=bind,source=$(pwd),destination=/home/user/work -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix -v /dev/bus/usb:/dev/bus/usb -ti niclabs/embeddable'
 ```
 
 For the change to take effect you need to reload the configuration (or open another shell session)
@@ -132,7 +132,7 @@ The user has `sudo` rights with no password (obviously sandboxed in the containe
 1. Open `cmd.exe` (you can use PowerShell if you want)
 1. Hit the following command (replace `/c/Users/foobar/my-project` with a location of of your project local repository in your environment)
 ```
-C:\> docker run --privileged --mount type=bind,source=/c/Users/foobar/my-project,destination=/home/user/work -e DISPLAY="host.docker.internal:0.0" -ti niclabs/embeddable
+C:\> docker run --rm --privileged --mount type=bind,source=/c/Users/foobar/my-project,destination=/home/user/work -e DISPLAY="host.docker.internal:0.0" -ti niclabs/embeddable
 ```
 Tested with Windows 10, version 1809.
 
@@ -158,18 +158,12 @@ If you don't need to run `cooja` with its GUI, the setup procedure becomes simpl
 
 ### for "Docker for Mac"
 ```bash
-alias embeddable="docker run --privileged \
-               --mount type=bind,source=\$PWD,destination=/home/user/work \
-               -ti niclabs/embeddable"
+alias embeddable='docker run --rm --privileged --mount type=bind,source=$(pwd),destination=/home/user/work -ti niclabs/embeddable'
 ```
 
 ### for "Docker Toolbox on macOS"
 ```bash
-alias embeddable="docker run --privileged \
-               --mount type=bind,source=$PWD,destination=/home/user/work \
-               --device=/dev/ttyUSB0 \
-               --device=/dev/ttyUSB1 \
-               -ti niclabs/embeddable"
+alias embeddable='docker run --rm --privileged --mount type=bind,source=$(pwd),destination=/home/user/work --device=/dev/ttyUSB0 --device=/dev/ttyUSB1 -ti niclabs/embeddable'
 ```
 
 ## With XQuartz
@@ -205,7 +199,7 @@ embeddable () {
         XAUTH_HEXKEY=`xauth list | head -n 1 | awk '{print $3}'`
         xauth add \${DISPLAY_NAME} . \${XAUTH_HEXKEY}
         $@"
-    docker run --privileged                                                                 \
+    docker run --rm --privileged                                                        \
                --mount type=bind,source=$(pwd),destination=/home/user/work \
                -v ~/.Xauthority:/home/user/dot.Xauthority:ro                             \
                -ti niclabs/embeddable                                                       \
@@ -223,7 +217,7 @@ embeddable () {
         XAUTH_HEXKEY=`xauth list | head -n 1 | awk '{print $3}'`
         xauth add \${DISPLAY_NAME} . \${XAUTH_HEXKEY}
         $@"
-    docker run --privileged                                                                 \
+    docker run --rm --privileged                                                         \
                --mount type=bind,source=$(pwd),destination=/home/user/work \
                -v ~/.Xauthority:/home/user/dot.Xauthority:ro                             \
                --device=/dev/ttyUSB0                                                        \
