@@ -4,20 +4,16 @@ This container provides a ready to use development environment for building and 
 
 The image includes the following tools
 
-* C/C++ build essential tools
+* Gcc and libc
+* make
 * Java JDK
 * Python
-* Node
-* Mono
 * Git
-* [Mosquitto](https://mosquitto.org) MQTT client and server
-* [coap-cli](https://github.com/mcollina/coap-cli)
+* Curl
 * IoT-Lab [cli-tools](https://github.com/iot-lab/cli-tools)
 * IoT-Lab [ssh-cli-tools](https://github.com/iot-lab/ssh-cli-tools)
 * ARM toolchain
 * msp430 toolchain
-* NXP toolchain
-* nRF52 SDK
 * [Contiki OS sources](http://www.contiki-os.org) with support for IoT-Lab boards (in $HOME/contiki)
 * Cooja simulator
 
