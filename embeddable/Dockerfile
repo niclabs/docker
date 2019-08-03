@@ -31,16 +31,13 @@ ENV CONTIKI /opt/contiki
 
 # Dowload IoT-Lab boards support for contiki
 RUN git clone https://github.com/iot-lab/openlab.git ${OPENLAB} && \
-        git clone --recursive https://github.com/iot-lab/contiki.git ${CONTIKI} && \
-        # Upgrade contiki source
+    git clone https://github.com/iot-lab/contiki.git ${CONTIKI} && \
     cd ${CONTIKI} && \
         git config user.email "devel@niclabs.cl" && \
         git config user.name "NIC Labs Devel" && \
         git remote add contiki https://github.com/contiki-os/contiki.git && \
-        git fetch contiki && \
-        git merge --no-edit contiki/master && \
-    rm -rf ${CONTIKI}/.git && \
-    rm -rf ${OPENLAB}/.git
+        git fetch contiki master && \
+        git merge --no-edit contiki/master
 
 FROM i386/ubuntu:16.04
 COPY --from=tools /opt /opt
@@ -98,10 +95,18 @@ RUN useradd -m -s /bin/bash -N -u $UID $USER && \
     chmod g+w /etc/passwd && \
     usermod -aG dialout $USER && \
     # Move contiki and openlab directories to /home/user
-    mv /opt/openlab ${OPENLAB} && \
-    mv /opt/contiki ${CONTIKI} && \
-    chown -R $USER ${OPENLAB} && \
-    chown -R $USER ${CONTIKI} && \
+    git clone --depth=1 file:///opt/openlab ${OPENLAB} && \
+    cd ${OPENLAB} && \
+        git remote set-url origin https://github.com/iot-lab/openlab.git && \
+        git gc --aggressive --prune=all && \
+    cd ${HOME} && \
+    git clone --depth=1 file:///opt/contiki ${CONTIKI} && \
+    cd ${CONTIKI} && \
+        git remote set-url origin https://github.com/iot-lab/contiki.git && \
+        git submodule update --init --recursive && \
+        git gc --aggressive --prune=all && \
+    rm -rf /opt/openlab && \
+    rm -rf /opt/contiki && \
     fix-permissions $HOME
 
 # Set user and workdir for what comes next
