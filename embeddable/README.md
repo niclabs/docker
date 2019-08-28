@@ -74,6 +74,12 @@ This will present you with a list of container IDs. Select the ID of the contain
 $ docker exec -it <the ID> /bin/bash
 ```
 
+The same can be done by setting the following alias in .bashrc, which will automatically join the first running instance of embeddable
+
+```bash
+alias embeddable-sh='ID=$(docker ps --format "{{.ID}},{{.Image}}" | grep -m 1 "niclabs/embeddable" | cut -d , -f 1); docker exec -it $ID bash'
+```
+
 ## Permissions
 
 By default, the container runs as user 'user' (uid 1000). All of the files under /home/user are group writable by the group 'users' (gid 100). 
