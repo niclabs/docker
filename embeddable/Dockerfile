@@ -3,6 +3,8 @@
 FROM i386/ubuntu:16.04 as tools
 LABEL maintainer="Felipe Lalanne <flalanne@niclabs.cl>"
 
+ARG CONTIKI_BRANCH=release/v4.3
+
 # Base Tools
 RUN apt-get -qq update && \
     apt-get -qq -y --no-install-recommends install \
@@ -26,18 +28,25 @@ RUN wget -nv https://launchpad.net/gcc-arm-embedded/5.0/5-2015-q4-major/+downloa
     cp -f -r /tmp/msp430/* /opt/ && \
     rm -rf /tmp/msp430 mspgcc*.tar.bz2
 
-ENV OPENLAB /opt/openlab
-ENV CONTIKI /opt/contiki
+# Add fix-permissions to this layer to prevent wasting space
+ADD fix-permissions /usr/local/bin/
+
+ENV OPENLAB /tmp/openlab
+ENV CONTIKI /opt/contiki-ng
+ENV CONTIKI_NG /tmp/contiki-ng
 
 # Dowload IoT-Lab boards support for contiki
-RUN git clone https://github.com/iot-lab/openlab.git ${OPENLAB} && \
-    git clone https://github.com/iot-lab/contiki.git ${CONTIKI} && \
+RUN git clone -b ${CONTIKI_BRANCH} https://github.com/contiki-ng/contiki-ng.git ${CONTIKI_NG} && \
+    git clone https://github.com/iot-lab/iot-lab-contiki-ng.git ${OPENLAB} && \
+    git clone --depth=1 file://${CONTIKI_NG} ${CONTIKI} && \
     cd ${CONTIKI} && \
-        git config user.email "devel@niclabs.cl" && \
-        git config user.name "NIC Labs Devel" && \
-        git remote add contiki https://github.com/contiki-os/contiki.git && \
-        git fetch contiki master && \
-        git merge --no-edit contiki/master
+        git submodule update --init --recursive && \
+        git gc --aggressive --prune=all && \
+        git remote set-url origin https://github.com/contiki-ng/contiki-ng.git && \
+    cp -r ${OPENLAB}/arch/platform/iotlab ${CONTIKI}/arch/platform/ && \
+    rm -rf ${OPENLAB} && \
+    rm -rf ${CONTIKI_NG} && \
+    fix-permissions ${CONTIKI}
 
 FROM i386/ubuntu:16.04
 COPY --from=tools /opt /opt
@@ -82,8 +91,7 @@ ADD fix-permissions /usr/local/bin/
 ENV JAVA_HOME           /usr/lib/jvm/default-java
 ENV HOME                /home/${USER}
 ENV WORK                ${HOME}/work
-ENV OPENLAB             ${HOME}/openlab
-ENV CONTIKI             ${HOME}/contiki
+ENV CONTIKI             /opt/contiki-ng
 ENV COOJA               ${CONTIKI}/tools/cooja
 ENV                     PATH="${HOME}:${PATH}"
 
@@ -94,20 +102,8 @@ RUN useradd -m -s /bin/bash -N -u $UID $USER && \
     chmod 0440 /etc/sudoers && \
     chmod g+w /etc/passwd && \
     usermod -aG dialout $USER && \
-    # Move contiki and openlab directories to /home/user
-    git clone --depth=1 file:///opt/openlab ${OPENLAB} && \
-    cd ${OPENLAB} && \
-        git remote set-url origin https://github.com/iot-lab/openlab.git && \
-        git gc --aggressive --prune=all && \
-    cd ${HOME} && \
-    git clone --depth=1 file:///opt/contiki ${CONTIKI} && \
-    cd ${CONTIKI} && \
-        git remote set-url origin https://github.com/iot-lab/contiki.git && \
-        git submodule update --init --recursive && \
-        git gc --aggressive --prune=all && \
-    rm -rf /opt/openlab && \
-    rm -rf /opt/contiki && \
-    fix-permissions $HOME
+    fix-permissions $HOME && \
+    ln -s ${CONTIKI} ${HOME}/contiki-ng
 
 # Set user and workdir for what comes next
 USER ${UID}
@@ -116,10 +112,9 @@ WORKDIR ${HOME}
 # Create Cooja shortcut and work directory
 RUN echo "#!/bin/bash\nant -Dbasedir=${COOJA} -f ${COOJA}/build.xml run" > ${HOME}/cooja && \
     chmod +x ${HOME}/cooja && \
-    mkdir $WORK
-
-# Build cooja and fix all permissions
-RUN ANT_OPTS=-Dfile.encoding=utf8 ant -q -f ${COOJA}/build.xml jar && \
+    mkdir $WORK && \
+    # Build cooja and fix all permissions
+    ANT_OPTS=-Dfile.encoding=utf8 ant -q -f ${COOJA}/build.xml jar && \
     fix-permissions ${COOJA}
 
 USER root
