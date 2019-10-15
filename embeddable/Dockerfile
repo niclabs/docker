@@ -110,10 +110,10 @@ USER ${UID}
 WORKDIR ${HOME}
 
 # Create Cooja shortcut and work directory
+# Build cooja and fix all permissions
 RUN echo "#!/bin/bash\nant -Dbasedir=${COOJA} -f ${COOJA}/build.xml run" > ${HOME}/cooja && \
     chmod +x ${HOME}/cooja && \
     mkdir $WORK && \
-    # Build cooja and fix all permissions
     ANT_OPTS=-Dfile.encoding=utf8 ant -q -f ${COOJA}/build.xml jar && \
     fix-permissions ${COOJA}
 
