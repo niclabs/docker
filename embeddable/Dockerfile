@@ -115,7 +115,8 @@ RUN echo "#!/bin/bash\nant -Dbasedir=${COOJA} -f ${COOJA}/build.xml run" > ${HOM
     mkdir $WORK
 
 # Build cooja and fix all permissions
-RUN ANT_OPTS=-Dfile.encoding=utf8 ant -q -f ${COOJA}/build.xml jar && \
+RUN ls -la ${COOJA} && \
+    ANT_OPTS=-Dfile.encoding=utf8 ant -q -f ${COOJA}/build.xml jar && \
     fix-permissions ${COOJA}
 
 USER root
