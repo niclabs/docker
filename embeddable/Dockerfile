@@ -102,8 +102,7 @@ RUN useradd -m -s /bin/bash -N -u $UID $USER && \
     chmod 0440 /etc/sudoers && \
     chmod g+w /etc/passwd && \
     usermod -aG dialout $USER && \
-    fix-permissions $HOME && \
-    ln -s ${CONTIKI} ${HOME}/contiki-ng
+    fix-permissions $HOME
 
 # Set user and workdir for what comes next
 USER ${UID}
@@ -115,7 +114,8 @@ RUN echo "#!/bin/bash\nant -Dbasedir=${COOJA} -f ${COOJA}/build.xml run" > ${HOM
     mkdir $WORK && \
     # Build cooja and fix all permissions
     ANT_OPTS=-Dfile.encoding=utf8 ant -q -f ${COOJA}/build.xml jar && \
-    fix-permissions ${COOJA}
+    fix-permissions ${COOJA} && \
+    ln -s ${CONTIKI} ${HOME}/contiki-ng
 
 USER root
 
