@@ -14,7 +14,7 @@ The image includes the following tools
 * IoT-Lab [ssh-cli-tools](https://github.com/iot-lab/ssh-cli-tools)
 * ARM toolchain
 * msp430 toolchain
-* [Contiki OS sources](http://www.contiki-os.org) with support for IoT-Lab boards (in $HOME/contiki)
+* [Contiki-NG OS sources](https://github.com/contiki-ng/contiki-ng) with support for IoT-Lab boards (in $HOME/contiki-ng)
 * Cooja simulator
 
 We provide a Docker image for this container hosted on DockerHub, as `niclabs/embeddable`.
@@ -98,7 +98,7 @@ From the container, you can directly run build tools (e.g. make) on your project
 
 You can even start Cooja from the container:
 ```bash
-$ cd ~/contiki/tools/cooja
+$ cd ~/contiki-ng/tools/cooja
 $ ant
 ```
 
