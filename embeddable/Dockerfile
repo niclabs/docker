@@ -49,7 +49,7 @@ RUN git clone -b ${CONTIKI_BRANCH} https://github.com/contiki-ng/contiki-ng.git 
     fix-permissions ${CONTIKI}
 
 FROM i386/ubuntu:16.04
-COPY --from=tools /opt /opt
+COPY --from=tools --chown=0:100 /opt /opt
 
 ENV DEBIAN_FRONTEND noninteractive
 ARG USER=user
@@ -115,7 +115,7 @@ RUN echo "#!/bin/bash\nant -Dbasedir=${COOJA} -f ${COOJA}/build.xml run" > ${HOM
     mkdir $WORK
 
 # Build cooja and fix all permissions
-RUN ls -la ${COOJA} && \
+RUN ls -la ${CONTIKI} && \
     ANT_OPTS=-Dfile.encoding=utf8 ant -q -f ${COOJA}/build.xml jar && \
     fix-permissions ${COOJA}
 
