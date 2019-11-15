@@ -74,6 +74,7 @@ RUN apt-get -qq update && \
         python-pip \
         python-serial \
         uncrustify \
+        netcat \
         && \
     apt-get -qq clean && \
     rm -rf /var/lib/apt/lists/*
