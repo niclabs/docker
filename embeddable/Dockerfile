@@ -74,7 +74,7 @@ RUN apt-get -qq update && \
         python-pip \
         python-serial \
         uncrustify \
-        netcat \
+        netcat-openbsd \
         srecord \
         net-tools iproute2 iputils-ping \
         && \
