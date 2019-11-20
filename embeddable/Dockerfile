@@ -97,6 +97,8 @@ ENV WORK                ${HOME}/work
 ENV CONTIKI             /opt/contiki-ng
 ENV COOJA               ${CONTIKI}/tools/cooja
 ENV                     PATH="${HOME}:${PATH}"
+ENV                     PS1="\u@\h:\W $ "
+
 
 # Create user, enable X forwarding, add to group dialout
 # -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix
