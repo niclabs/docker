@@ -76,6 +76,7 @@ RUN apt-get -qq update && \
         uncrustify \
         netcat \
         srecord \
+        net-tools iproute2 iputils-ping \
         && \
     apt-get -qq clean && \
     rm -rf /var/lib/apt/lists/*
