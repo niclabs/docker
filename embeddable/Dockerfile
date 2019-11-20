@@ -75,6 +75,7 @@ RUN apt-get -qq update && \
         python-serial \
         uncrustify \
         netcat \
+        srecord \
         && \
     apt-get -qq clean && \
     rm -rf /var/lib/apt/lists/*
