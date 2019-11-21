@@ -130,6 +130,7 @@ CMD ["bash"]
 # Add local files as late as possible to avoid cache busting
 COPY entrypoint.sh /usr/local/bin/
 COPY h2spec /usr/local/bin/
+COPY coap-client /usr/local/bin/
 
 # Set workdir and switch back to dev to avoid accidental container runs as root
 WORKDIR $WORK
