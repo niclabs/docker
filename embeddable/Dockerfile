@@ -97,7 +97,6 @@ ENV WORK                ${HOME}/work
 ENV CONTIKI             /opt/contiki-ng
 ENV COOJA               ${CONTIKI}/tools/cooja
 ENV                     PATH="${HOME}:${PATH}"
-ENV                     PS1="\u@\h:\W $ "
 
 
 # Create user, enable X forwarding, add to group dialout
@@ -120,7 +119,8 @@ RUN echo "#!/bin/bash\nant -Dbasedir=${COOJA} -f ${COOJA}/build.xml run" > ${HOM
     # Build cooja and fix all permissions
     ANT_OPTS=-Dfile.encoding=utf8 ant -q -f ${COOJA}/build.xml jar && \
     fix-permissions ${COOJA} && \
-    ln -s ${CONTIKI} ${HOME}/contiki-ng
+    ln -s ${CONTIKI} ${HOME}/contiki-ng && \
+    echo 'PS1="\u@\h:\W$ "' >> ${HOME}/.bashrc
 
 USER root
 
