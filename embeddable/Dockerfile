@@ -97,6 +97,7 @@ ENV WORK                ${HOME}/work
 ENV CONTIKI             /opt/contiki-ng
 ENV COOJA               ${CONTIKI}/tools/cooja
 ENV                     PATH="${HOME}:${PATH}"
+ENV                     TERM="xterm-color"
 
 
 # Create user, enable X forwarding, add to group dialout
