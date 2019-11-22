@@ -3,7 +3,7 @@
 FROM i386/ubuntu:16.04 as tools
 LABEL maintainer="Felipe Lalanne <flalanne@niclabs.cl>"
 
-ARG CONTIKI_BRANCH=release/v4.3
+ARG CONTIKI_BRANCH=release/v4.4
 
 # Base Tools
 RUN apt-get -qq update && \
