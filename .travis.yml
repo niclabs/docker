@@ -10,6 +10,8 @@ script:
     if [ $EMBEDDABLE_CHANGED != 0 ]; then
       DOCKER_IMG=niclabs/embeddable
       echo "Embeddable docker image changed, build from Dockerfile"
+      docker build embeddable -t $DOCKER_IMG:minimal --target minimal;
+      docker build embeddable -t $DOCKER_IMG:contiki-ng --target contiki-ng;
       docker build embeddable -t $DOCKER_IMG;
       if [ $? != 0 ]; then
         echo "Failed to build Docker image"
@@ -18,6 +20,8 @@ script:
       if [ $TRAVIS_SECURE_ENV_VARS == true ] && [ $TRAVIS_PULL_REQUEST == false ]; then
         echo "This build is for an update of branch develop. Push image to Dockerhub"
         echo $DOCKERHUB_PASSWD | docker login --username $DOCKERHUB_USER --password-stdin
+        docker push $DOCKER_IMG:minimal;
+        docker push $DOCKER_IMG:contiki-ng;
         docker push $DOCKER_IMG;
       fi
     fi
