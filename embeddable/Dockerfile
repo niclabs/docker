@@ -7,6 +7,7 @@ ENV DEBIAN_FRONTEND noninteractive
 ARG USER=user
 ARG UID=1000
 ARG GID=100
+ARG TINI=v0.18.0
 
 # Update path with toolchains
 ENV PATH=${PATH}:/opt/bin
@@ -42,6 +43,9 @@ ENV HOME                /home/${USER}
 ENV WORK                ${HOME}/work
 ENV                     TERM="xterm-color"
 
+# Add local files as late as possible to avoid cache busting
+ADD https://github.com/krallin/tini/releases/download/${TINI}/tini-i386 /sbin/tini
+
 # Create user, enable X forwarding, add to group dialout
 # -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix
 RUN useradd -m -s /bin/bash -N -u $UID $USER && \
@@ -49,6 +53,7 @@ RUN useradd -m -s /bin/bash -N -u $UID $USER && \
     chmod 0440 /etc/sudoers && \
     chmod g+w /etc/passwd && \
     usermod -aG dialout $USER && \
+    chmod +x /sbin/tini && \
     mkdir $WORK && \
     # Configure prompt
     echo 'PS1="\u@\h:\W$ "' >> ${HOME}/.bashrc && \
@@ -56,10 +61,9 @@ RUN useradd -m -s /bin/bash -N -u $UID $USER && \
 
 USER root
 
-ENTRYPOINT ["entrypoint.sh"]
+ENTRYPOINT ["/sbin/tini", "--", "entrypoint.sh"]
 CMD ["bash"]
 
-# Add local files as late as possible to avoid cache busting
 COPY entrypoint.sh /usr/local/bin/
 COPY h2spec /usr/local/bin/
 COPY coap-client /usr/local/bin/
