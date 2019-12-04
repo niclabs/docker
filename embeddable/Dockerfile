@@ -20,14 +20,10 @@ RUN apt-get -qq update && \
         gdb \
         make \
         sudo \
-        ant \
         git \
         curl wget \
-        python-pip \
-        python-serial \
         uncrustify \
         netcat-openbsd \
-        srecord \
         net-tools iproute2 iputils-ping iputils-tracepath \
         && \
     apt-get -qq clean && \
@@ -87,7 +83,10 @@ RUN apt-get -qq update && \
     apt-get -qq -y --no-install-recommends install \
         openjdk-8-jdk \
         ant \
+        python-pip \
+        python-serial \
         bzip2 \
+        srecord \
         && \
     apt-get -qq clean && \
     rm -rf /var/lib/apt/lists/* && \
