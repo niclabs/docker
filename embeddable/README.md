@@ -1,15 +1,22 @@
 # Dockerized development environment for embedded applications
 
-This container provides a ready to use development environment for building and testing embedded applications. The container can also be used to run Continuous Integration tests in Travis, making it easy to reproduce the testing environment locally. The container is based on the [Contiki NG docker container](https://github.com/contiki-ng/contiki-ng/wiki/Docker), as are these instructions.
+This docker image provides a ready to use development environment for building and testing embedded applications. The image can also be used to run Continuous Integration tests in Travis, making it easy to reproduce the testing environment locally. The image is based on the [Contiki NG docker container](https://github.com/contiki-ng/contiki-ng/wiki/Docker), as are these instructions.
 
-The image includes the following tools
+Two images are configured in this repository. A _minimal_ image allows to build code for linux devices and is well suited for usage inside continuous integration environments, and includes the following
 
 * Gcc and libc
 * make
-* Java JDK
-* Python
+* gdb
 * Git
-* Curl
+* Curl and Wget
+* net-tools, netcat, iproute, ping6, tracepath
+* coap-client
+* h2spec
+
+The full image adds embedded toolchains and contiki support to the above. Including the following packages
+
+* Python with serial suport
+* Java JDK and ANT
 * IoT-Lab [cli-tools](https://github.com/iot-lab/cli-tools)
 * IoT-Lab [ssh-cli-tools](https://github.com/iot-lab/ssh-cli-tools)
 * ARM toolchain
@@ -17,7 +24,7 @@ The image includes the following tools
 * [Contiki-NG OS sources](https://github.com/contiki-ng/contiki-ng) with support for IoT-Lab boards (in $HOME/contiki-ng)
 * Cooja simulator
 
-We provide a Docker image for this container hosted on DockerHub, as `niclabs/embeddable`.
+We provide a Docker image for this container hosted on DockerHub, as `niclabs/embeddable` (or `niclabs/embeddable:contiki-ng`) for the full image and `niclabs/embeddable:minimal` for the minimal image. 
 
 # Setup
 
