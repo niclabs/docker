@@ -48,7 +48,7 @@ RUN useradd -m -s /bin/bash -N -u $UID $USER && \
     echo "${USER} ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers && \
     chmod 0440 /etc/sudoers && \
     chmod g+w /etc/passwd && \
-    usermod -aG dialout $USER && \
+    usermod -aG dialout,staff $USER && \
     chmod +x /sbin/tini && \
     mkdir $WORK && \
     # Configure prompt
