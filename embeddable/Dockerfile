@@ -1,6 +1,6 @@
 # Container with development environment
 # for embedded programming
-FROM i386/ubuntu:18.04 as minimal
+FROM i386/ubuntu:18.04 as base
 LABEL maintainer="Felipe Lalanne <flalanne@niclabs.cl>"
 
 ENV DEBIAN_FRONTEND noninteractive
@@ -9,22 +9,11 @@ ARG UID=1000
 ARG GID=100
 ARG TINI=v0.18.0
 
-# Update path with toolchains
-ENV PATH=${PATH}:/opt/bin
 
 # Base Tools
 RUN apt-get -qq update && \
     apt-get -qq -y --no-install-recommends install \
-        gcc \
-        libc6-dev \
-        gdb \
-        make \
         sudo \
-        git \
-        curl wget \
-        uncrustify \
-        netcat-openbsd \
-        net-tools iproute2 iputils-ping iputils-tracepath \
         && \
     apt-get -qq clean && \
     rm -rf /var/lib/apt/lists/*
@@ -60,13 +49,43 @@ USER root
 ENTRYPOINT ["/sbin/tini", "--", "entrypoint.sh"]
 CMD ["bash"]
 
+# Copy entrypoint
 COPY entrypoint.sh /usr/local/bin/
-COPY h2spec /usr/local/bin/
-COPY coap-client /usr/local/bin/
 
 # Set workdir and switch back to dev to avoid accidental container runs as root
 WORKDIR $WORK
 USER ${UID}
+
+
+#######################################################
+# Minimal build target
+# contains minimal set of tools to build c programs and
+# test network communications
+#######################################################
+FROM base as minimal
+USER root
+
+# Base Tools
+RUN apt-get -qq update && \
+    apt-get -qq -y --no-install-recommends install \
+        gcc \
+        libc6-dev \
+        gdb \
+        make \
+        sudo \
+        git \
+        curl wget \
+        uncrustify \
+        netcat-openbsd \
+        net-tools iproute2 iputils-ping iputils-tracepath \
+        && \
+    apt-get -qq clean && \
+    rm -rf /var/lib/apt/lists/*
+
+COPY h2spec /usr/local/bin/
+COPY coap-client /usr/local/bin/
+
+USER ${USER}
 
 
 #######################################################
