@@ -11,6 +11,7 @@ script:
       DOCKER_IMG=niclabs/embeddable
       echo "Embeddable docker image changed, build from Dockerfile"
       docker build embeddable -t $DOCKER_IMG:base --target base;
+      docker build embeddable -t $DOCKER_IMG:base64 --target base64;
       docker build embeddable -t $DOCKER_IMG:minimal --target minimal;
       docker build embeddable -t $DOCKER_IMG:contiki-ng --target contiki-ng;
       docker build embeddable -t $DOCKER_IMG;
@@ -22,6 +23,7 @@ script:
         echo "This build is for an update of branch develop. Push image to Dockerhub"
         echo $DOCKERHUB_PASSWD | docker login --username $DOCKERHUB_USER --password-stdin
         docker push $DOCKER_IMG:base;
+        docker push $DOCKER_IMG:base64;
         docker push $DOCKER_IMG:minimal;
         docker push $DOCKER_IMG:contiki-ng;
         docker push $DOCKER_IMG;

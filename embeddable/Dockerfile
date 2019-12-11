@@ -1,5 +1,7 @@
-# Container with development environment
+#######################################################
+# base image with user management
 # for embedded programming
+#######################################################
 FROM i386/ubuntu:18.04 as base
 LABEL maintainer="Felipe Lalanne <flalanne@niclabs.cl>"
 
@@ -56,6 +58,64 @@ COPY entrypoint.sh /usr/local/bin/
 WORKDIR $WORK
 USER ${UID}
 
+#######################################################
+# 64bit base image with user management
+# for embedded programming
+#######################################################
+FROM ubuntu:18.04 as base64
+
+ENV DEBIAN_FRONTEND noninteractive
+ARG USER=user
+ARG UID=1000
+ARG GID=100
+ARG TINI=v0.18.0
+
+
+# Base Tools
+RUN apt-get -qq update && \
+    apt-get -qq -y --no-install-recommends install \
+        sudo \
+        && \
+    apt-get -qq clean && \
+    rm -rf /var/lib/apt/lists/*
+
+
+# Add a script that we will use to correct permissions after running certain commands
+ADD fix-permissions /usr/local/bin/
+
+# Set environment variables
+ENV USER                ${USER}
+ENV HOME                /home/${USER}
+ENV WORK                ${HOME}/work
+ENV                     TERM="xterm-color"
+
+# Add local files as late as possible to avoid cache busting
+ADD https://github.com/krallin/tini/releases/download/${TINI}/tini /sbin/tini
+
+# Create user, enable X forwarding, add to group dialout
+# -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix
+RUN useradd -m -s /bin/bash -N -u $UID $USER && \
+    echo "${USER} ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers && \
+    chmod 0440 /etc/sudoers && \
+    chmod g+w /etc/passwd && \
+    usermod -aG dialout,staff $USER && \
+    chmod +x /sbin/tini && \
+    mkdir $WORK && \
+    # Configure prompt
+    echo 'PS1="\u@\h:\W$ "' >> ${HOME}/.bashrc && \
+    fix-permissions $HOME
+
+USER root
+
+ENTRYPOINT ["/sbin/tini", "--", "entrypoint.sh"]
+CMD ["bash"]
+
+# Copy entrypoint
+COPY entrypoint.sh /usr/local/bin/
+
+# Set workdir and switch back to dev to avoid accidental container runs as root
+WORKDIR $WORK
+USER ${UID}
 
 #######################################################
 # Minimal build target
