@@ -59,6 +59,7 @@ WORKDIR $WORK
 USER ${UID}
 
 
+
 #######################################################
 # Minimal build target
 # contains minimal set of tools to build c programs and
@@ -86,6 +87,31 @@ RUN apt-get -qq update && \
 
 COPY h2spec /usr/local/bin/
 COPY coap-client /usr/local/bin/
+
+USER ${USER}
+
+
+#######################################################
+# Tools for building for AVR targets with GCC
+# Inherits from minimal image
+#######################################################
+FROM niclabs/embeddable:minimal as avr
+
+# Necessary since niclabs/embeddable:base sets main user as ${USER}
+# alternataively commands may be run with sudo
+USER root
+
+# Base Tools
+RUN apt-get -qq update && \
+    apt-get -qq -y --no-install-recommends install \
+        binutils \
+        gcc-avr \
+        gdb-avr \
+        avr-libc \
+        avrdude \
+        && \
+    apt-get -qq clean && \
+    rm -rf /var/lib/apt/lists/*
 
 USER ${USER}
 

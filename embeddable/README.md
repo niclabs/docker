@@ -2,7 +2,11 @@
 
 This docker image provides a ready to use development environment for building and testing embedded applications. The image can also be used to run Continuous Integration tests in Travis, making it easy to reproduce the testing environment locally. The image is based on the [Contiki NG docker container](https://github.com/contiki-ng/contiki-ng/wiki/Docker), as are these instructions.
 
-Two images are configured in this repository. A _minimal_ image allows to build code for linux devices and is well suited for usage inside continuous integration environments, and includes the following
+Four images are configured in this repository. 
+
+A _base_ image configures user management for child images. It extends from [i326/ubuntu](https://hub.docker.com/r/i386/ubuntu) and installs sudo, and entry scripts. 
+
+A _minimal_ image allows to build code for linux devices and is well suited for usage inside continuous integration environments, and includes the following
 
 * Gcc and libc
 * make
@@ -13,7 +17,14 @@ Two images are configured in this repository. A _minimal_ image allows to build 
 * coap-client
 * h2spec
 
-The full image adds embedded toolchains and contiki support to the above. Including the following packages
+A _avr_ image extends the minimal image with tools for building AVR targets including
+
+* binutils
+* gcc-avr and gdb-avr
+* [avr-libc](https://www.microchip.com/webdoc/AVRLibcReferenceManual/index.html)
+* [avrdude](https://www.nongnu.org/avrdude/user-manual/avrdude.html)
+
+The _full_ or _contiki-ng_ image extends the **minimal** image with ARM and msp430 toolchains and contiki support. It includes the following packages
 
 * Python with serial suport
 * Java JDK and ANT
@@ -41,8 +52,8 @@ Download the embeddable image:
 ```bash
 $ docker pull niclabs/embeddable
 ```
+This will automatically download `niclabs/embeddable:latest`, which is the recommended image for development.
 
-This will automatically download `niclabs/embeddable:latest`, which is the recommended image for use in Travis and for development.
 The image is meant for use with your codebase as a bind mount, which means you make the application repository on the host accessible from inside the container.
 This way, you can work on the codebase using host tools / editors, and build/run commands on the same codebase from the container.
 
@@ -51,13 +62,26 @@ On Linux, you can add the following to `~/.profile` or similar, for instance, to
 ```bash
 alias embeddable='docker run --rm --privileged --mount type=bind,source=$(pwd),destination=/home/user/work -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix -v /dev/bus/usb:/dev/bus/usb -ti niclabs/embeddable'
 ```
-
-For the change to take effect you need to reload the configuration (or open another shell session)
+For the change to take effect you need to reload the configuration (or open another shell session). 
 ```bash
 $ source ~/.bashrc
 ```
+Notice that the command will mount the current working directory within the $HOME/work directory inside the container.
 
-This will mount the current working directory with the equivalent name inside the home directory in the container
+## Using alternative images
+
+If you want to use any of the alternative images for your local environment, it suffices to add the respective tag to the instructions above. For instance, for avr, download the avr tag.
+```bash
+$ docker pull niclabs/embeddable:tag
+```
+Then, create the alias
+```bash
+alias embeddable-avr='docker run --rm --privileged --mount type=bind,source=$(pwd),destination=/home/user/work -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix -v /dev/bus/usb:/dev/bus/usb -ti niclabs/embeddable:avr'
+```
+Or simply run locally
+```bash
+$ docker run --rm --privileged --mount type=bind,source=$(pwd),destination=/home/user/work -v /dev/bus/usb:/dev/bus/usb -ti niclabs/embeddable:avr
+```
 
 # Launching and Exiting
 

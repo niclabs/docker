@@ -12,6 +12,7 @@ script:
       echo "Embeddable docker image changed, build from Dockerfile"
       docker build embeddable -t $DOCKER_IMG:base --target base;
       docker build embeddable -t $DOCKER_IMG:minimal --target minimal;
+      docker build embeddable -t $DOCKER_IMG:avr --target avr;
       docker build embeddable -t $DOCKER_IMG:contiki-ng --target contiki-ng;
       docker build embeddable -t $DOCKER_IMG;
       if [ $? != 0 ]; then
@@ -23,6 +24,7 @@ script:
         echo $DOCKERHUB_PASSWD | docker login --username $DOCKERHUB_USER --password-stdin
         docker push $DOCKER_IMG:base;
         docker push $DOCKER_IMG:minimal;
+        docker push $DOCKER_IMG:avr;
         docker push $DOCKER_IMG:contiki-ng;
         docker push $DOCKER_IMG;
       fi
