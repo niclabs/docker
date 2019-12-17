@@ -53,6 +53,7 @@ CMD ["bash"]
 
 # Copy entrypoint
 COPY entrypoint.sh /usr/local/bin/
+COPY usbreset.sh /usr/local/bin/
 
 # Set workdir and switch back to dev to avoid accidental container runs as root
 WORKDIR $WORK
