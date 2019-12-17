@@ -200,4 +200,4 @@ RUN echo "#!/bin/bash\nant -Dbasedir=${COOJA} -f ${COOJA}/build.xml run" > ${HOM
 
 # Set workdir and switch back to dev to avoid accidental container runs as root
 WORKDIR $WORK
-USER ${UID}
+USER ${USER}
