@@ -12,9 +12,7 @@ fi
 if [ $(id -u) == 0 ] ; then
     if runuser -u user -- test ! -w /home/user/work; then
         # Fix permissions on workdir if mounted as volume
-        chgrp 100 /home/user/work
-        chmod g+rwX /home/user/work
-        chmod +6000 /home/user/work
+        fix-permissions /home/user/work
     fi
 
     # Enable IPV6
@@ -42,9 +40,7 @@ else
 
     if [[ ! -w /home/user/work ]]; then
         # Fix permissions on workdir if mounted as volume
-        sudo chgrp 100 /home/user/work
-        sudo chmod g+rwX /home/user/work
-        sudo chmod +6000 /home/user/work
+        fix-permissions /home/user/work
     fi
 
     # Warn if the user isn't going to be able to write files to $HOME.
