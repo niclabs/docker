@@ -16,6 +16,8 @@ ARG TINI=v0.18.0
 RUN apt-get -qq update && \
     apt-get -qq -y --no-install-recommends install \
         sudo \
+        libpam-cap \
+        libcap2-bin \
         && \
     apt-get -qq clean && \
     rm -rf /var/lib/apt/lists/*
@@ -41,6 +43,14 @@ RUN useradd -m -s /bin/bash -N -u $UID $USER && \
     chmod g+w /etc/passwd && \
     usermod -aG dialout,staff $USER && \
     chmod +x /sbin/tini && \
+    # Configure user capabilities
+    echo "# Add net administrator capability to 'user' user" >> /etc/security/capability.conf &&\
+    echo "cap_net_admin            user" >> /etc/security/capability.conf && \
+    echo "" >> /etc/pam.d/login && \
+    echo "# Enable pam capabilities" >> /etc/pam.d/login && \
+    echo "auth  required  pam_cap.so" >> /etc/pam.d/login && \
+    echo "auth  required  pam_cap.so" >> /etc/pam.d/runuser && \
+    # Create local configurations
     mkdir $WORK && \
     # Configure prompt
     echo 'PS1="\u@\h:\W$ "' >> ${HOME}/.bashrc && \
@@ -78,6 +88,7 @@ RUN apt-get -qq update && \
         make \
         sudo \
         git \
+        gnupg \
         curl wget \
         uncrustify \
         netcat-openbsd \
@@ -127,24 +138,30 @@ FROM minimal as contiki-ng
 USER root
 
 # Base Tools
-RUN apt-get -qq update && \
+RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys F23C5A6CF475977595C89F51BA6932366A755776 && \
+    echo "deb http://ppa.launchpad.net/deadsnakes/ppa/ubuntu bionic main " | tee /etc/apt/sources.list.d/python3.7.list && \
+    apt-get -qq update && \
     apt-get -qq -y --no-install-recommends install \
         openjdk-8-jdk \
         ant \
-        python-pip \
-        python-serial \
+        python3.7 \
         bzip2 \
         srecord \
+        rlwrap \
         && \
     apt-get -qq clean && \
     rm -rf /var/lib/apt/lists/* && \
+    # Set python 3.7 as default
+    update-alternatives --install /usr/bin/python python `which python3.7` 0 && \
+    # Install pip
+    curl https://bootstrap.pypa.io/get-pip.py | python3.7 && \
     mkdir -p /opt
 
 # Upgrade pip to latest version
 # Install IoT-Lab cli-tools and ssh-cli-tools
-RUN pip -q install --upgrade pip
 RUN pip -q install setuptools && \
-    pip install iotlabcli==2.5.4 && iotlabsshcli==0.2.3
+    pip -q install pyserial && \
+    pip -q install iotlabcli
 
 # Install ARM toolchain
 RUN wget -nv https://launchpad.net/gcc-arm-embedded/5.0/5-2015-q4-major/+download/gcc-arm-none-eabi-5_2-2015q4-20151219-linux.tar.bz2 && \
