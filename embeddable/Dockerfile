@@ -89,6 +89,7 @@ RUN apt-get -qq update && \
         sudo \
         git \
         gnupg \
+        ca-certificates \
         curl wget \
         uncrustify \
         netcat-openbsd \
